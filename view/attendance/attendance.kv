@@ -1,0 +1,156 @@
+<AttendanceScreenView>:
+    MDBoxLayout:
+        md_bg_color: app.theme_cls.bg_normal
+
+    MDBoxLayout:
+        size_hint_y: .17
+        spacing: 20
+        padding: 10
+        md_bg_color: app.theme_cls.primary_color
+        pos_hint: {"top": 1}
+        orientation: "horizontal"
+
+    MDIconButton:
+        icon: "arrow-left"
+        icon_size: "20dp"
+        size_hint: None, None
+        size: (45, 45)
+        icon_color: 1, 1, 1, 1
+        user_font_size: '12sp'
+        theme_text_color: "Custom"
+        #text_color: app.theme_cls.primary_color
+        pos_hint: {'center_x': .09, 'center_y': .96}
+        on_release:
+            app.add_screen_2list("pending")
+            app.change_screen("home")
+
+    MDLabel:
+        id: attendance_title
+        text: "Leaders & Workers Attendance"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '14sp'
+        font_name: "fonts/Poppins-Medium.ttf"
+        color: "white"
+        pos_hint: {'center_x': .65, 'center_y': .96}
+        # bold: True
+
+    MDLabel:
+        id: location_title
+        text: "Location Not Set"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'center'
+        font_size: '12sp'
+        font_name: "fonts/Poppins-Medium.ttf"
+        color: "white"
+        pos_hint: {'center_x': .5, 'center_y': .93}
+        # bold: True
+
+
+    MDBoxLayout:
+        size_hint: .9, .05
+        padding: [10, 0, 5, 0]
+        radius: [10]
+        orientation: 'horizontal'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.868}
+        md_bg_color: "white"
+
+        TextInput:
+            id: home_search_bar
+            text: ''
+            hint_text: "Search Your Name"
+            size_hint: .88, None
+            pos_hint: {"center_x": .46, 'center_y': .5}
+            height: self.minimum_height
+            multiline: False
+            cursor_width: "2sp"
+            font_size: "12sp"
+            font_name: "fonts/Poppins-Regular.ttf"
+            foreground_color: app.theme_cls.primary_color
+            background_color: 0, 0, 0, 0
+            on_text: app.get_offline_search(data=home_search_bar.text)
+            #on_focus: app.validate_when_focus(*args)
+
+
+    MDBoxLayout:
+        id: pending_data_list
+        size_hint: 1, .785
+        padding: [15, 10, 15, 10]
+        pos_hint: {"center_x": .5, "center_y": .45}
+        orientation: "horizontal"
+
+        ScrollView:
+            MDList:
+                spacing: 10
+                id: worker_list
+
+    MDFloatLayout:
+        size_hint_y: .07
+        spacing: 20
+        padding: 10
+        md_bg_color: app.theme_cls.primary_color
+        pos_hint: {"y": 0}
+        orientation: "horizontal"
+
+        MDIconButton:
+            icon: "tools"
+            icon_size: "20dp"
+            size_hint: None, None
+            size: (45, 45)
+            icon_color: 1, 1, 1, 1
+            user_font_size: '12sp'
+            theme_text_color: "Custom"
+            #text_color: app.theme_cls.primary_color
+            pos_hint: {'center_x': .15, 'center_y': .5}
+            on_release:
+                app.get_all_workers_data()
+
+        MDBoxLayout:
+            size_hint: .25, .7
+            #padding: [10, 0, 5, 0]
+            radius: [5]
+            orientation: 'horizontal'
+            pos_hint: {'center_x': 0.4, 'center_y': 0.5}
+            md_bg_color: 1, 1, 1, 0.1
+
+            MDLabel:
+                id: total_attendance
+                text: "0"
+                size: self.texture_size
+                #theme_text_color: 'Custom'
+                halign: 'center'
+                font_size: '15sp'
+                font_name: "fonts/Poppins-Medium.ttf"
+                color: 'white'
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                # bold: True
+
+        MDIconButton:
+            icon: "account-cog"
+            icon_size: "20dp"
+            size_hint: None, None
+            size: (45, 45)
+            icon_color: 1, 1, 1, 1
+            user_font_size: '12sp'
+            theme_text_color: "Custom"
+            #text_color: app.theme_cls.primary_color
+            pos_hint: {"center_x": .65, "center_y": .5}
+            on_release:
+                app.confirm_get_workers()
+
+
+        MDIconButton:
+            icon: "send"
+            icon_size: "20dp"
+            size_hint: None, None
+            size: (45, 45)
+            icon_color: 1, 1, 1, 1
+            user_font_size: '12sp'
+            theme_text_color: "Custom"
+            #text_color: app.theme_cls.primary_color
+            pos_hint: {'center_x': .85, 'center_y': .5}
+            on_release:
+                app.prep_worker_attendance()
+

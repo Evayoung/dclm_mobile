@@ -1,0 +1,200 @@
+<SetupReg>:
+    size_hint: 1, None
+    height: "300dp"
+    md_bg_color: "white"
+
+    MDLabel:
+        text: "Program Domain :"
+        pos_hint: {'center_x': .58, 'center_y': 1}
+        halign: 'left'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: app.theme_cls.primary_color
+        bold: True
+
+    MDBoxLayout:
+        size_hint: .9, .1
+        padding: [10, 0, 20, 0]
+        radius: [5]
+        pos_hint: {'center_x': 0.5, 'center_y': 0.91}
+        md_bg_color: app.theme_cls.bg_normal
+
+        TextInput:
+            id: p_domain
+            text: root.p_domain
+            hint_text: "Crusade"
+            size_hint: .88, None
+            pos_hint: {"center_x": .46, 'center_y': .5}
+            height: self.minimum_height
+            multiline: False
+            cursor_width: "2sp"
+            font_size: "10sp"
+            font_name: "fonts/Poppins-Regular.ttf"
+            foreground_color: app.theme_cls.primary_color
+            background_color: 0, 0, 0, 0
+            #on_text: app.validate_hospital_id(*args)
+            #on_focus: app.validate_when_focus(*args)
+
+        MDTextButton:
+            id: p_dom
+            text: "Select"
+            font_size: "10sp"
+            color: .6, .6, .6, 1
+            size_hint: .15, .2
+            pos_hint: {"center_x": .97, "center_y": .5}
+            bold: True
+            on_release:
+                root.program_domain_dropdown()
+
+    MDLabel:
+        text: "Program Type :"
+        pos_hint: {'center_x': .58, 'center_y': .8}
+        halign: 'left'
+        font_size: '11sp'
+        size_hint_y: .9
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: app.theme_cls.primary_color
+        bold: True
+
+    MDBoxLayout:
+        size_hint: .9, .1
+        padding: [10, 0, 20, 0]
+        radius: [5]
+        pos_hint: {'center_x': 0.5, 'center_y': 0.71}
+        md_bg_color: app.theme_cls.bg_normal
+
+        TextInput:
+            id: p_type
+            text: root.p_type
+            hint_text: "Impact Academy"
+            size_hint: .88, None
+            pos_hint: {"center_x": .46, 'center_y': .5}
+            height: self.minimum_height
+            multiline: False
+            cursor_width: "2sp"
+            font_size: "10sp"
+            readonly: True
+            font_name: "fonts/Poppins-Regular.ttf"
+            foreground_color: app.theme_cls.primary_color
+            background_color: 0, 0, 0, 0
+            #on_text: app.validate_hospital_id(*args)
+            #on_focus: app.validate_when_focus(*args)
+
+        MDTextButton:
+            id: p_typ
+            text: "Select"
+            font_size: "10sp"
+            size_hint_y: .9
+            color: .6, .6, .6, 1
+            size_hint: .15, .2
+            pos_hint: {"center_x": .97, "center_y": .5}
+            bold: True
+            on_release:
+                root.program_type_dropdown()
+
+    MDLabel:
+        text: "Program Level :"
+        pos_hint: {'center_x': .58, 'center_y': .6}
+        halign: 'left'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: app.theme_cls.primary_color
+        bold: True
+
+    MDBoxLayout:
+        size_hint: .9, .1
+        padding: [10, 0, 20, 0]
+        radius: [5]
+        pos_hint: {'center_x': 0.5, 'center_y': 0.51}
+        md_bg_color: app.theme_cls.bg_normal
+
+        TextInput:
+            id: p_level
+            text: root.p_level
+            hint_text: "National"
+            size_hint: .88, None
+            pos_hint: {"center_x": .46, 'center_y': .5}
+            height: self.minimum_height
+            multiline: False
+            cursor_width: "2sp"
+            font_size: "10sp"
+            font_name: "fonts/Poppins-Regular.ttf"
+            foreground_color: app.theme_cls.primary_color
+            background_color: 0, 0, 0, 0
+            #on_text: app.validate_hospital_id(*args)
+            #on_focus: app.validate_when_focus(*args)
+
+        MDTextButton:
+            id: level
+            size_hint_y: .9
+            text: "Select"
+            font_size: "10sp"
+            color: .6, .6, .6, 1
+            size_hint: .15, .2
+            pos_hint: {"center_x": .97, "center_y": .5}
+            bold: True
+            on_release:
+                root.show_program_level()
+
+    MDLabel:
+        text: "Location Id :"
+        pos_hint: {'center_x': .58, 'center_y': .4}
+        halign: 'left'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: app.theme_cls.primary_color
+        bold: True
+
+    MDBoxLayout:
+        id: id_in
+        size_hint: .9, .1
+        padding: [10, 0, 20, 0]
+        radius: [5]
+        pos_hint: {'center_x': 0.5, 'center_y': 0.31}
+        md_bg_color: app.theme_cls.bg_normal
+
+        TextInput:
+            id: p_id
+            text: root.l_id
+            hint_text: "(e.g) AF-234-KWR-ILR-ILE-001"
+            size_hint: .88, None
+            pos_hint: {"center_x": .46, 'center_y': .5}
+            height: self.minimum_height
+            multiline: False
+            cursor_width: "2sp"
+            font_size: "10sp"
+            font_name: "fonts/Poppins-Regular.ttf"
+            foreground_color: app.theme_cls.primary_color
+            background_color: 0, 0, 0, 0
+            on_text: root.validate_id(*args)
+            #on_focus: app.validate_when_focus(*args)
+
+    MDLabel:
+        id: error
+        text: ""
+        pos_hint: {'center_x': .5, 'center_y': .21}
+        halign: 'center'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: "red"
+        bold: True
+
+    MDRaisedButton:
+        text: "Close"
+        md_bg_color: app.theme_cls.primary_color
+        size_hint: .35, .1
+        pos_hint: {"center_x": .25, "center_y": .07}
+        bold: True
+        on_release:
+            app.close_setup_dialog()
+
+    MDRaisedButton:
+        id: submit_btn
+        text: "Save"
+        md_bg_color: app.theme_cls.primary_color
+        size_hint: .35, .1
+        pos_hint: {"center_x": .75, "center_y": .07}
+        bold: True
+        on_release:
+            app.save_setup(domain=p_domain.text, type_=p_type.text, level=p_level.text, pid=p_id.text)
+            root.confirm_saved()

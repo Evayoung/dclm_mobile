@@ -1,0 +1,78 @@
+<SubmitData>:
+    size_hint: 1, None
+    height: "100dp"
+    md_bg_color: "white"
+    orientation: "vertical"
+    MDLabel:
+        id: program_domain
+        text: root.p_domain
+        size: self.texture_size
+        color: app.theme_cls.primary_color
+        font_name: "fonts/Poppins-Medium.ttf"
+        pos_hint: {'center_x': 0.6}
+        font_size: '11sp'
+        halign: 'left'
+        #bold: True
+
+    MDLabel:
+        id: program_type
+        text: root.p_type
+        size: self.texture_size
+        color: app.theme_cls.primary_color
+        font_name: "fonts/Poppins-Medium.ttf"
+        pos_hint: {'center_x': 0.6}
+        font_size: '11sp'
+        halign: 'left'
+        #bold: True
+
+    MDLabel:
+        id: program_location
+        text: root.l_name
+        size: self.texture_size
+        color: app.theme_cls.primary_color
+        font_name: "fonts/Poppins-Medium.ttf"
+        pos_hint: {'center_x': 0.6}
+        font_size: '11sp'
+        halign: 'left'
+        #bold: True
+
+    MDLabel:
+        id: location_id
+        text: root.l_id
+        size: self.texture_size
+        color: app.theme_cls.primary_color
+        font_name: "fonts/Poppins-Medium.ttf"
+        pos_hint: {'center_x': 0.6}
+        font_size: '11sp'
+        halign: 'left'
+        #bold: True
+
+    MDBoxLayout:
+        size_hint_x: .8
+        height: '55dp'
+        padding: [10, 0, 20, 0]
+        radius: [5]
+        pos_hint: {'center_x': 0.5}
+        #md_bg_color: app.theme_cls.accent_color
+        canvas.before:
+            Color:
+                rgb: 204/255, 204/255, 204/255
+            Line:
+                width: 0.5
+                rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+        TextInput:
+            id: user_password
+            text: ''
+            hint_text: "Extra note"
+            size_hint: .88, None
+            pos_hint: {"center_x": .46, 'center_y': .5}
+            height: self.minimum_height
+            multiline: False
+            cursor_width: "2sp"
+            font_size: "10sp"
+            font_name: "fonts/Poppins-Regular.ttf"
+            foreground_color: app.theme_cls.primary_color
+            background_color: 0, 0, 0, 0
+            #read_only: True
+            #on_text: app.add_note(*args)

@@ -1,0 +1,177 @@
+<EditCount>:
+    size_hint: 1, None
+    height: "300dp"
+    md_bg_color: "white"
+    orientation: "vertical"
+    GridLayout
+        cols: 2
+        spacing: 10
+        # padding: [0, 15, 33, 15]
+        MDBoxLayout:
+            #size_hint: .88, .055
+            padding: [10, 0, 20, 0]
+            radius: [5]
+            #pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+            md_bg_color: "white"
+
+            TextInput:
+                id: a
+                text: ""
+                hint_text: "Adult Male"
+                size_hint: .88, None
+                pos_hint: {"center_x": .46, 'center_y': .5}
+                height: self.minimum_height
+                multiline: False
+                cursor_width: "2sp"
+                font_size: "14sp"
+                halign: "center"
+                font_name: "fonts/Poppins-Regular.ttf"
+                foreground_color: app.theme_cls.primary_color
+                background_color: 0, 0, 0, 0
+                #on_text: app.validate_hospital_id(*args)
+                #on_focus: app.validate_when_focus(*args)
+
+        MDBoxLayout:
+            #size_hint: .88, .055
+            padding: [10, 0, 20, 0]
+            radius: [5]
+            #pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+            md_bg_color: "white"
+
+            TextInput:
+                id: b
+                text: ""
+                hint_text: "Adult Female"
+                size_hint: .88, None
+                pos_hint: {"center_x": .46, 'center_y': .5}
+                height: self.minimum_height
+                multiline: False
+                cursor_width: "2sp"
+                font_size: "14sp"
+                halign: "center"
+                font_name: "fonts/Poppins-Regular.ttf"
+                foreground_color: app.theme_cls.primary_color
+                background_color: 0, 0, 0, 0
+                #on_text: app.validate_hospital_id(*args)
+                #on_focus: app.validate_when_focus(*args)
+
+        MDBoxLayout:
+            #size_hint: .88, .055
+            padding: [10, 0, 20, 0]
+            radius: [5]
+            #pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+            md_bg_color: "white"
+
+            TextInput:
+                id: c
+                text: ""
+                hint_text: "Youth Male"
+                size_hint: .88, None
+                pos_hint: {"center_x": .46, 'center_y': .5}
+                height: self.minimum_height
+                multiline: False
+                cursor_width: "2sp"
+                font_size: "14sp"
+                halign: "center"
+                font_name: "fonts/Poppins-Regular.ttf"
+                foreground_color: app.theme_cls.primary_color
+                background_color: 0, 0, 0, 0
+                #on_text: app.validate_hospital_id(*args)
+                #on_focus: app.validate_when_focus(*args)
+
+        MDBoxLayout:
+            #size_hint: .88, .055
+            padding: [10, 0, 20, 0]
+            radius: [5]
+            #pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+            md_bg_color: "white"
+
+            TextInput:
+                id: d
+                text: ""
+                hint_text: "Youth Female"
+                size_hint: .88, None
+                pos_hint: {"center_x": .46, 'center_y': .5}
+                height: self.minimum_height
+                multiline: False
+                cursor_width: "2sp"
+                font_size: "14sp"
+                halign: "center"
+                font_name: "fonts/Poppins-Regular.ttf"
+                foreground_color: app.theme_cls.primary_color
+                background_color: 0, 0, 0, 0
+                #on_text: app.validate_hospital_id(*args)
+                #on_focus: app.validate_when_focus(*args)
+
+        MDBoxLayout:
+            #size_hint: .88, .055
+            padding: [10, 0, 20, 0]
+            radius: [5]
+            #pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+            md_bg_color: "white"
+
+            TextInput:
+                id: e
+                text: ""
+                hint_text: "Boys count"
+                size_hint: .88, None
+                pos_hint: {"center_x": .46, 'center_y': .5}
+                height: self.minimum_height
+                multiline: False
+                cursor_width: "2sp"
+                font_size: "14sp"
+                halign: "center"
+                font_name: "fonts/Poppins-Regular.ttf"
+                foreground_color: app.theme_cls.primary_color
+                background_color: 0, 0, 0, 0
+                #on_text: app.validate_hospital_id(*args)
+                #on_focus: app.validate_when_focus(*args)
+
+        MDBoxLayout:
+            #size_hint: .88, .055
+            padding: [10, 0, 20, 0]
+            radius: [5]
+            #pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+            md_bg_color: "white"
+
+            TextInput:
+                id: f
+                text: ""
+                hint_text: "Girls Count"
+                size_hint: .88, None
+                pos_hint: {"center_x": .46, 'center_y': .5}
+                height: self.minimum_height
+                multiline: False
+                cursor_width: "2sp"
+                font_size: "14sp"
+                halign: "center"
+                font_name: "fonts/Poppins-Regular.ttf"
+                foreground_color: app.theme_cls.primary_color
+                background_color: 0, 0, 0, 0
+                #on_text: app.validate_hospital_id(*args)
+                #on_focus: app.validate_when_focus(*args)
+    MDBoxLayout:
+        size_hint: 1, .2
+        # padding: [10, 0, 20, 0]
+        spacing: 10
+        orientation: "horizontal"
+        pos_hint: {'bottom': 0}
+        md_bg_color: "white"
+
+        MDRaisedButton:
+            text: "Close"
+            md_bg_color: app.theme_cls.primary_color
+            size_hint: .27, None
+            pos_hint: {"center_x": .3, "center_y": .5}
+            bold: True
+            on_release:
+                app.close_edit_dialog()
+
+        MDRaisedButton:
+            text: "Save"
+            md_bg_color: app.theme_cls.primary_color
+            size_hint: .27, None
+            pos_hint: {"center_x": .7, "center_y": .5}
+            bold: True
+            on_release:
+                app.save_edited(a=a.text, b=b.text, c=c.text, d=d.text, e=e.text, f=f.text)

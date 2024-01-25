@@ -1,0 +1,375 @@
+<CounterScreenView>:
+    MDBoxLayout:
+        md_bg_color: app.theme_cls.bg_normal
+
+    MDBoxLayout:
+        size_hint_y: .21
+        spacing: 20
+        padding: 10
+        md_bg_color: app.theme_cls.primary_color
+        pos_hint: {"top": 1}
+        orientation: "horizontal"
+
+    MDIconButton:
+        icon: "arrow-left"
+        icon_size: "20dp"
+        size_hint: None, None
+        size: (45, 45)
+        icon_color: 1, 1, 1, 1
+        user_font_size: '12sp'
+        theme_text_color: "Custom"
+        #text_color: app.theme_cls.primary_color
+        pos_hint: {'center_x': .09, 'center_y': .96}
+        on_release:
+            app.change_screen("home")
+
+    MDLabel:
+        # id: counter_title
+        text: "Population Counter"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '16sp'
+        font_name: "fonts/Poppins-SemiBold.ttf"
+        color: "white"
+        pos_hint: {'center_x': .65, 'center_y': .96}
+        bold: True
+
+    MDTextButton:
+        text: "Setup"
+        font_size: "11sp"
+        color: 1, 1, 1, 1
+        size_hint: .15, .2
+        font_name: "fonts/Poppins-Regular.ttf"
+        pos_hint: {"center_x": .93, "center_y": .96}
+        bold: True
+        on_release:
+            app.setup_program_dialog()
+
+    MDLabel:
+        id: counter
+        text: "0"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'center'
+        font_size: '25sp'
+        #font_name: "fonts/Poppins-SemiBold.ttf"
+        color: "white"
+        pos_hint: {'center_x': .4, 'center_y': .89}
+        bold: True
+
+    MDLabel:
+        text: "Total Count"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'center'
+        font_size: '10sp'
+        font_name: "fonts/Poppins-SemiBold.ttf"
+        color: "white"
+        pos_hint: {'center_x': .4, 'center_y': .85}
+        bold: True
+
+# ======================================================================================================================
+    MDBoxLayout:
+        size_hint: .25, .04
+        padding: [5, 0, 5, 0]
+        radius: [5]
+        pos_hint: {'center_x': 0.8, 'center_y': 0.84}
+        # md_bg_color: app.theme_cls.primary_color
+
+        TextInput:
+            id: set_date
+            text: ""
+            hint_text: "MM-DD-YYYY"
+            size_hint: .98, None
+            pos_hint: {"center_x": .46, 'center_y': .5}
+            height: self.minimum_height
+            multiline: False
+            cursor_width: "2sp"
+            font_size: "9sp"
+            font_name: "fonts/Poppins-Regular.ttf"
+            foreground_color: "white"
+            background_color: 0, 0, 0, 0
+            readonly: True
+            #on_text: app.validate_hospital_id(*args)
+            #on_focus: app.validate_when_focus(*args)
+
+    MDIconButton:
+        id: date_picker
+        icon: "images/pick_date.png"
+        icon_size: "13dp"
+        size_hint: None, None
+        size: (45, 45)
+        icon_color: 1, 1, 1, 1
+        user_font_size: '12sp'
+        theme_text_color: "Custom"
+        #text_color: app.theme_cls.primary_color
+        pos_hint: {'center_x': .94, 'center_y': .84}
+        on_release:
+            root.show_date_picker()
+
+# ======================================================================================================================
+
+
+
+    MDBoxLayout:
+        size_hint_y: .73
+        spacing: 20
+        radius: [30, 30, 0, 0]
+        padding: 10
+        md_bg_color: "white"
+        pos_hint: {"bottom": 1}
+        orientation: "vertical"
+        GridLayout:
+            cols: 2
+            spacing: 45
+            padding: [33, 15, 33, 15]
+
+            CounterButton:
+                id: adult_male
+                on_release: app.adult_male(), app.vibrate_now()
+                MDBoxLayout:
+                    #md_bg_color: 0, 0, 0, .7
+                    orientation: 'vertical'
+                    spacing: 0
+                    padding: [0, 30, 0, 25]
+                    pos_hint: {'center_y': .5}
+                    MDLabel:
+                        id: adult_male
+                        text: "0"
+                        size: self.texture_size
+                        #theme_text_color: 'Custom'
+                        halign: 'center'
+                        font_size: '25sp'
+                        # font_name: "fonts/Poppins-SemiBold.ttf"
+                        color: "white"
+                        pos_hint: {'center_y': .5}
+                        bold: True
+                    MDLabel:
+                        text: "Adult Male"
+                        size: self.texture_size
+                        color: "white"
+                        font_size: '11sp'
+                        halign: 'center'
+                        pos_hint: {'center_y': .4}
+                        bold: True
+
+            CounterButton:
+                id: adult_female
+                on_release: app.adult_female(), app.vibrate_now()
+                MDBoxLayout:
+                    #md_bg_color: 0, 0, 0, .7
+                    orientation: 'vertical'
+                    spacing: 0
+                    padding: [0, 30, 0, 25]
+                    pos_hint: {'center_y': .5}
+                    MDLabel:
+                        id: adult_female
+                        text: "0"
+                        size: self.texture_size
+                        #theme_text_color: 'Custom'
+                        halign: 'center'
+                        font_size: '25sp'
+                        # font_name: "fonts/Poppins-SemiBold.ttf"
+                        color: "white"
+                        pos_hint: {'center_y': .5}
+                        bold: True
+                    MDLabel:
+                        text: "Adult Female"
+                        size: self.texture_size
+                        color: "white"
+                        font_size: '11sp'
+                        halign: 'center'
+                        pos_hint: {'center_y': .4}
+                        bold: True
+
+            CounterButton:
+                id: youth_male
+                on_release: app.youth_male(), app.vibrate_now()
+                MDBoxLayout:
+                    #md_bg_color: 0, 0, 0, .7
+                    orientation: 'vertical'
+                    spacing: 0
+                    padding: [0, 30, 0, 25]
+                    pos_hint: {'center_y': .5}
+                    MDLabel:
+                        id: youth_male
+                        text: "0"
+                        size: self.texture_size
+                        #theme_text_color: 'Custom'
+                        halign: 'center'
+                        font_size: '25sp'
+                        # font_name: "fonts/Poppins-SemiBold.ttf"
+                        color: "white"
+                        pos_hint: {'center_y': .5}
+                        bold: True
+                    MDLabel:
+                        text: "Youth Male"
+                        size: self.texture_size
+                        color: "white"
+                        font_size: '11sp'
+                        halign: 'center'
+                        pos_hint: {'center_y': .4}
+                        bold: True
+
+            CounterButton:
+                id: youth_female
+                on_release: app.youth_female(), app.vibrate_now()
+                MDBoxLayout:
+                    #md_bg_color: 0, 0, 0, .7
+                    orientation: 'vertical'
+                    spacing: 0
+                    padding: [0, 30, 0, 25]
+                    pos_hint: {'center_y': .5}
+                    MDLabel:
+                        id: youth_female
+                        text: "0"
+                        size: self.texture_size
+                        #theme_text_color: 'Custom'
+                        halign: 'center'
+                        font_size: '25sp'
+                        # font_name: "fonts/Poppins-SemiBold.ttf"
+                        color: "white"
+                        pos_hint: {'center_y': .5}
+                        bold: True
+                    MDLabel:
+                        text: "Youth Female"
+                        size: self.texture_size
+                        color: "white"
+                        font_size: '11sp'
+                        halign: 'center'
+                        pos_hint: {'center_y': .4}
+                        bold: True
+
+            CounterButton:
+                id: boys
+                on_release: app.boys(), app.vibrate_now()
+                MDBoxLayout:
+                    #md_bg_color: 0, 0, 0, .7
+                    orientation: 'vertical'
+                    spacing: 0
+                    padding: [0, 30, 0, 25]
+                    pos_hint: {'center_y': .5}
+                    MDLabel:
+                        id: boys
+                        text: "0"
+                        size: self.texture_size
+                        #theme_text_color: 'Custom'
+                        halign: 'center'
+                        font_size: '25sp'
+                        # font_name: "fonts/Poppins-SemiBold.ttf"
+                        color: "white"
+                        pos_hint: {'center_y': .5}
+                        bold: True
+                    MDLabel:
+                        text: "Boys"
+                        size: self.texture_size
+                        color: "white"
+                        font_size: '11sp'
+                        halign: 'center'
+                        pos_hint: {'center_y': .4}
+                        bold: True
+
+            CounterButton:
+                id: girls
+                on_release: app.girls(), app.vibrate_now()
+                MDBoxLayout:
+                    #md_bg_color: 0, 0, 0, .7
+                    orientation: 'vertical'
+                    spacing: 0
+                    padding: [0, 30, 0, 25]
+                    pos_hint: {'center_y': .5}
+                    MDLabel:
+                        id: girls
+                        text: "0"
+                        size: self.texture_size
+                        #theme_text_color: 'Custom'
+                        halign: 'center'
+                        font_size: '25sp'
+                        # font_name: "fonts/Poppins-SemiBold.ttf"
+                        color: "white"
+                        pos_hint: {'center_y': .5}
+                        bold: True
+                    MDLabel:
+                        text: "Girls"
+                        size: self.texture_size
+                        color: "white"
+                        font_size: '11sp'
+                        halign: 'center'
+                        pos_hint: {'center_y': .4}
+                        bold: True
+
+        MDBoxLayout:
+            size_hint_y: .1
+            spacing: 20
+            padding: [30, 0, 30, 8]
+            #padding: 10
+            #md_bg_color: app.theme_cls.primary_color
+            # pos_hint: {"bottom": 1}
+            orientation: "horizontal"
+            Button:
+                text: 'Reset'
+
+                pos_hint: {"center_y": .5}
+                color: 1, 1, 1, 1
+                background_color: 0, 0, 0, 0
+                font_size: '12sp'
+                #font_name: "font/Poppins-SemiBold.ttf"
+                on_release:
+                    app.confirm_reset_dialog()
+                canvas.before:
+                    Color:
+                        rgb: app.theme_cls.primary_color
+
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [5]
+
+            Button:
+                text: 'Edit'
+
+                pos_hint: {"center_y": .5}
+                color: 1, 1, 1, 1
+                background_color: 0, 0, 0, 0
+                font_size: '12sp'
+                #font_name: "font/Poppins-SemiBold.ttf"
+                on_release:
+                    app.edit_count_dialog()
+                canvas.before:
+                    Color:
+                        rgb: app.theme_cls.primary_color
+
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [5]
+
+            Button:
+                id: save_count
+                text: 'Save'
+                pos_hint: {"center_y": .5}
+                color: 1, 1, 1, 1
+                background_color: 0, 0, 0, 0
+                font_size: '12sp'
+                #font_name: "fonts/Poppins-SemiBold.ttf"
+                on_release:
+                    app.confirm_submit_dialog()
+
+                canvas.before:
+                    Color:
+                        rgb: app.theme_cls.primary_color
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [5]
+
+
+
+
+<CounterButton@MDCard>
+    radius: 15
+    shadow_softness: 14
+    elevation: 1
+    ripple_behavior: True
+    md_bg_color: app.theme_cls.primary_color

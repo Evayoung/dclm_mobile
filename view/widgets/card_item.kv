@@ -1,0 +1,60 @@
+<CardItem>:
+    size_hint_y: None
+    height: 70
+    padding: [4,]
+    radius: 8
+    #shadow_softness: 14
+    #elevation: 1
+    ripple_behavior:  True
+    # on_press:
+        #app.view_count_dialog()
+        #app.change_screen("view")
+
+    FitImage:
+        id: picture
+        radius: root.radius
+        size_hint_x: None
+        width: root.height-10
+
+    MDBoxLayout:
+        orientation: "vertical"
+        adaptive_height: True
+        spacing: 6
+        padding: [12, 0, 0, 0]
+        pos_hint: {"center_y": .5}
+
+        MDLabel:
+            id: program
+            text: ''
+            #font_style: "H6"
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            bold: True
+            # text_align: "center"
+            adaptive_height: True
+            color: app.theme_cls.primary_color
+
+        MDLabel:
+            id: date
+            text: ''
+            theme_text_color: "Hint"
+            adaptive_height: True
+            #[color: 1, 1, 1, 1
+            font_size: "11sp"
+    MDLabel:
+        id: data_id
+        text: ''
+        size_hint_x: 0.05
+        theme_text_color: "Hint"
+        adaptive_height: True
+        color: 1, 1, 1, 1
+        font_size: "11sp"
+
+    MDCheckbox:
+        id: check
+        size_hint: None, None
+        size: dp(48), dp(48)
+        color_active: app.theme_cls.primary_color
+        color_inactive: app.theme_cls.primary_color
+        pos_hint: {"center_y": .5}
+        on_release: app.update_marked(check, data_id)

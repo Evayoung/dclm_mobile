@@ -1,0 +1,45 @@
+<Navigator>:
+    size_hint: .56, None
+    height: 42
+    padding: [4,]
+    radius: [22,]
+    shadow_softness: 10
+    pos_hint: {"center_x": .5}
+    elevation: 3
+    ripple_behavior:  False
+    md_bg_color: app.theme_cls.primary_color
+    MDRelativeLayout:
+        padding: [5,]
+        spacing: 15
+        pos_hint: {"center": (.5, .5) }
+        orientation: "horizontal"
+        #md_bg_color: app.theme_cls.primary_color
+
+        MDTextButton:
+            text: "Counter"
+            font_size: "11sp"
+            font_name: "fonts/Poppins-Regular.ttf"
+            color: "white"
+            pos_hint: {"center_x": .2, "center_y": .5}
+            on_release:
+                app.change_screen("counter")
+
+        MDTextButton:
+            text: "Form"
+            font_size: "11sp"
+            font_name: "fonts/Poppins-Regular.ttf"
+            color: "white"
+            pos_hint: {"center_x": .5, "center_y": .5}
+            on_release:
+                app.change_screen("record")
+
+        MDTextButton:
+            text: "Record"
+            font_size: "11sp"
+            font_name: "fonts/Poppins-Regular.ttf"
+            color: "white"
+            pos_hint: {"center_x": .8, "center_y": .5}
+            on_release:
+                app.change_screen("view")
+
+            # 102/255, 102/255, 102/255

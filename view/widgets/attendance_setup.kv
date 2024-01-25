@@ -1,0 +1,150 @@
+<AttendanceSetup>:
+    size_hint: 1, None
+    height: "160dp"
+    md_bg_color: "white"
+    orientation: 'vertical'
+    padding: [20, 0, 20, 20]
+    spacing: 10
+    MDBoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        MDCheckbox:
+            #group: 'setup'
+            size_hint: None, None
+            size: dp(35), dp(35)
+            color_active: app.theme_cls.primary_color
+            color_inactive: app.theme_cls.primary_color
+            pos_hint: {'center_y': 0.5}
+            on_active: root.use_id(*args)
+
+        MDBoxLayout:
+            #size_hint: .9, .05
+            padding: [0, 0, 5, 0]
+            radius: [10]
+            orientation: 'horizontal'
+            #pos_hint: {'center_x': 0.5, 'center_y': 0.868}
+            md_bg_color: "white"
+
+            TextInput:
+                id: by_location
+                text: ''
+                hint_text: "Location ID e.g XX-XXX..."
+                size_hint: .88, None
+                pos_hint: {"center_x": .46, 'center_y': .5}
+                height: self.minimum_height
+                multiline: False
+                cursor_width: "2sp"
+                font_size: "12sp"
+                font_name: "fonts/Poppins-Regular.ttf"
+                foreground_color: app.theme_cls.primary_color
+                background_color: 0, 0, 0, 0
+                readonly: True
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        MDCheckbox:
+            #group: 'setup'
+            size_hint: None, None
+            size: dp(35), dp(35)
+            color_active: app.theme_cls.primary_color
+            color_inactive: app.theme_cls.primary_color
+            pos_hint: {'center_y': 0.5}
+            on_active: root.use_gender(*args)
+
+        MDBoxLayout:
+            #size_hint: .9, .05
+            padding: [0, 0, 5, 0]
+            radius: [10]
+            orientation: 'horizontal'
+            #pos_hint: {'center_x': 0.5, 'center_y': 0.868}
+            md_bg_color: "white"
+
+            TextInput:
+                id: by_gender
+                text: ''
+                hint_text: "Gender e.g Male"
+                size_hint: .88, None
+                pos_hint: {"center_x": .46, 'center_y': .5}
+                height: self.minimum_height
+                multiline: False
+                cursor_width: "2sp"
+                font_size: "12sp"
+                font_name: "fonts/Poppins-Regular.ttf"
+                foreground_color: app.theme_cls.primary_color
+                background_color: 0, 0, 0, 0
+                readonly: True
+
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        spacing: 10
+        MDCheckbox:
+            #group: 'setup'
+            size_hint: None, None
+            size: dp(35), dp(35)
+            color_active: app.theme_cls.primary_color
+            color_inactive: app.theme_cls.primary_color
+            pos_hint: {'center_y': 0.5}
+            on_active: root.use_units(*args)
+
+        MDBoxLayout:
+            #size_hint: .9, .05
+            padding: [0, 0, 5, 0]
+            radius: [10]
+            orientation: 'horizontal'
+            #pos_hint: {'center_x': 0.5, 'center_y': 0.868}
+            md_bg_color: "white"
+
+            TextInput:
+                id: by_units
+                text: ''
+                hint_text: "Units e.g Choir"
+                size_hint: .88, None
+                pos_hint: {"center_x": .46, 'center_y': .5}
+                height: self.minimum_height
+                multiline: False
+                cursor_width: "2sp"
+                font_size: "12sp"
+                font_name: "fonts/Poppins-Regular.ttf"
+                foreground_color: app.theme_cls.primary_color
+                background_color: 0, 0, 0, 0
+                readonly: True
+
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        spacing: 15
+        MDCheckbox:
+            id: all_workers
+            #group: 'setup'
+            size_hint: None, None
+            size: dp(35), dp(35)
+            color_active: app.theme_cls.primary_color
+            color_inactive: app.theme_cls.primary_color
+            pos_hint: {'center_y': 0.5}
+            # on_active: app.update_offline(*args)
+
+        MDLabel:
+            text: "State Workers"
+            size: self.texture_size
+            #theme_text_color: 'Custom'
+            halign: 'left'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Medium.ttf"
+            color: app.theme_cls.primary_color
+            pos_hint: {'center_y': 0.5}
+            # bold: True
+
+    MDTextButton:
+        text: "Save"
+        # md_bg_color: 0, 0, 0, 0
+        color: app.theme_cls.primary_color
+        #size_hint: .4, .06
+        halign: "center"
+        font_name: "fonts/Poppins-Medium.ttf"
+        pos_hint: {"center_x": .9}
+        font_size: '12sp'
+        on_release:
+            app.close_attendance_setup()
+            app.set_worker_data(by_location, by_gender, by_units, all_workers)

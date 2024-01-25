@@ -1,0 +1,123 @@
+<LoginScreenView>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background.png'
+
+    MDBoxLayout:
+        md_bg_color: 0, 0, 0, .7
+        orientation: 'vertical'
+        spacing: 20
+        padding: 20
+
+    Image:
+        id: img
+        pos_hint: {'center_x': .5, 'center_y': .8}
+        source: 'images/logo.png'
+        size_hint_x: .26
+
+
+    MDCheckbox:
+        size_hint: None, None
+        size: dp(48), dp(48)
+        active: True
+        color_active: '#b3b3b3'
+        color_inactive: '#b3b3b3'
+        pos_hint: {'center_x': 0.25, 'center_y': 0.55}
+        on_active: app.update_offline(*args)
+
+    MDLabel:
+        text: "Use app with internet"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'center'
+        font_size: '12sp'
+        font_name: "fonts/Poppins-Medium.ttf"
+        color: "#b3b3b3"
+        pos_hint: {'center_x': .5, 'center_y': .55}
+        # bold: True
+
+
+    MDBoxLayout:
+        size_hint: .8, .065
+        padding: [10, 0, 20, 0]
+        radius: [10]
+        pos_hint: {'center_x': 0.5, 'center_y': 0.45}
+        #md_bg_color: app.theme_cls.accent_color
+        canvas.before:
+            Color:
+                rgb: 204/255, 204/255, 204/255
+            Line:
+                width: 0.5
+                rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+        TextInput:
+            id: user_login
+            text: ''
+            hint_text: "Email Address"
+            size_hint: .88, None
+            pos_hint: {"center_x": .46, 'center_y': .5}
+            height: self.minimum_height
+            multiline: False
+            cursor_width: "2sp"
+            font_size: "12sp"
+            font_name: "fonts/Poppins-Regular.ttf"
+            foreground_color: 204/255, 204/255, 204/255
+            background_color: 0, 0, 0, 0
+            #read_only: True
+            #on_text: app.validate_hospital_id(*args)
+            #on_focus: app.validate_when_focus(*args)
+
+    MDBoxLayout:
+        size_hint: .8, .065
+        padding: [10, 0, 20, 0]
+        radius: [10]
+        pos_hint: {'center_x': 0.5, 'center_y': 0.35}
+        #md_bg_color: app.theme_cls.accent_color
+        canvas.before:
+            Color:
+                rgb: 204/255, 204/255, 204/255
+            Line:
+                width: 0.5
+                rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+        TextInput:
+            id: user_password
+            text: ''
+            hint_text: "********"
+            size_hint: .88, None
+            pos_hint: {"center_x": .46, 'center_y': .5}
+            height: self.minimum_height
+            multiline: False
+            cursor_width: "2sp"
+            font_size: "12sp"
+            password: True
+            font_name: "fonts/Poppins-Regular.ttf"
+            foreground_color: 204/255, 204/255, 204/255
+            background_color: 0, 0, 0, 0
+            #read_only: True
+            #on_text: app.validate_hospital_id(*args)
+            #on_focus: app.validate_when_focus(*args)
+
+    MDRaisedButton:
+        id: login_btn
+        text: "Login"
+        md_bg_color: app.theme_cls.primary_color
+        size_hint: .4, .06
+        disabled: False
+        pos_hint: {"center_x": .5, "center_y": .2}
+        bold: True
+        on_release:
+
+            app.do_login(user_email=user_login.text, user_password=user_password.text)
+
+    MDTextButton:
+        text: "< Create an account"
+        font_size: "12sp"
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: 1, 1, 1, 1
+        # size_hint_y: .9
+        pos_hint: {"center_x": .5, "center_y": .12}
+        on_release:
+            app.change_screen("signup")

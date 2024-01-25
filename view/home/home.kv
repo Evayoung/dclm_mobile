@@ -1,0 +1,342 @@
+<HomeScreenView>:
+    MDBoxLayout:
+        md_bg_color: app.theme_cls.bg_normal
+
+    MDBoxLayout:
+        size_hint_y: .905
+        spacing: 20
+        padding: 10
+        radius: [0, 0, 25, 25]
+        md_bg_color: app.theme_cls.primary_color
+        pos_hint: {"top": 1}
+        orientation: "horizontal"
+
+
+    Image:
+        id: img
+        pos_hint: {'center_x': .09, 'center_y': .94}
+        source: 'images/user_pics.png'
+        size_hint_x: .1
+
+    MDLabel:
+        id: user_id
+        text: ""
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: "#F1B20B"
+        pos_hint: {'center_x': .68, 'center_y': .96}
+        bold: True
+
+    MDLabel:
+        id: user_nam
+        text: ""
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '12sp'
+        font_name: "fonts/Poppins-Medium.ttf"
+        color: "#b3b3b3"
+        pos_hint: {'center_x': .68, 'center_y': .935}
+        # bold: True
+
+    MDLabel:
+        id: user_typ
+        text: ""
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Medium.ttf"
+        color: "#b3b3b3"
+        pos_hint: {'center_x': .68, 'center_y': .91}
+
+
+    MDIconButton:
+        icon: 'cog-outline'
+        icon_size: "20dp"
+        size_hint: None, None
+        size: (40, 40)
+        icon_color: 1, 1, 1, 1
+        user_font_size: '10sp'
+        theme_text_color: "Custom"
+        #text_color: app.theme_cls.primary_color
+        pos_hint: {'center_x': .9, 'center_y': .95}
+        on_release:
+            app.change_screen("settings")
+            app.add_screen_2list("home")
+
+    MDLabel:
+        id: today_date
+        text: ""
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'right'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: "#F1B20B"
+        pos_hint: {'center_x': .45, 'center_y': .88}
+        bold: True
+
+
+
+    Category:
+        id: cat
+        radius: 15
+        shadow_softness: 14
+        elevation: 2
+        ripple_behavior:  True
+        size_hint: .94, .27
+        md_bg_color: "gray"
+        pos_hint: {"center_x": .5, "center_y": .71}
+        #on_release:
+            #app.setup_program_dialog()
+
+        MDBoxLayout:
+            size_hint: 1, 1
+            padding: 2
+            radius: [15,]
+            md_bg_color: 'black'
+            pos_hint: {"center_x": .5, "center_y": .5}
+            orientation: "horizontal"
+
+            FitImage:
+                id: disp_pics
+                radius: cat.radius
+                size_hint_x: 1
+                # width: root.height-10
+
+
+    MDLabel:
+        id: user_name
+        text: "D C L M"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '16sp'
+        font_name: "fonts/Poppins-SemiBold.ttf"
+        color: "#b3b3b3"
+        pos_hint: {'center_x': .55, 'center_y': .53}
+        # bold: True
+
+    MDLabel:
+        id: user_type
+        text: "Osogbo, Osun State"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '12sp'
+        font_name: "fonts/Poppins-Medium.ttf"
+        color: "#b3b3b3"
+        pos_hint: {'center_x': .75, 'center_y': .53}
+
+
+    MDLabel:
+        id: pending_data_count
+        # size_hint: .02, .02
+        text: ""
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        # md_bg_color: "red"
+        halign: 'center'
+        font_size: '10sp'
+        font_name: "fonts/Poppins-Medium.ttf"
+        color: "red"
+        pos_hint: {'center_x': .9, 'center_y': .53}
+        # bold: True
+
+    MDIconButton:
+        icon: 'images/pending.png'
+        icon_size: "17dp"
+        size_hint: None, None
+        size: (40, 40)
+        icon_color: 1, 1, 1, 1
+        user_font_size: '10sp'
+        theme_text_color: "Custom"
+        #text_color: app.theme_cls.primary_color
+        pos_hint: {'center_x': .9, 'center_y': .51}
+        on_release:
+            app.change_screen("pending")
+
+
+    MDLabel:
+        text: "Current Setup"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'center'
+        font_size: '13sp'
+        font_name: "fonts/Poppins-SemiBold.ttf"
+        color: "#b3b3b3"
+        pos_hint: {'center_x': .5, 'center_y': .47}
+        # bold: True
+
+    MDLabel:
+        text: "Program Domain :"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'right'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: "#b3b3b3"
+        pos_hint: {'center_x': .01, 'center_y': .43}
+        bold: True
+
+    MDLabel:
+        text: "Program Type :"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'right'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: "#b3b3b3"
+        pos_hint: {'center_x': .01, 'center_y': .4}
+        bold: True
+
+    MDLabel:
+        text: "Program Level :"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'right'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: "#b3b3b3"
+        pos_hint: {'center_x': .01, 'center_y': .37}
+        bold: True
+
+    MDLabel:
+        text: "Location ID :"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'right'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: "#b3b3b3"
+        pos_hint: {'center_x': .01, 'center_y': .34}
+        bold: True
+
+
+
+
+    MDLabel:
+        id: program_domain
+        text: ""
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: "#F1B20B"
+        pos_hint: {'center_x': 1.05, 'center_y': .43}
+        bold: True
+
+    MDLabel:
+        id: program_type
+        text: ""
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: "#F1B20B"
+        pos_hint: {'center_x': 1.05, 'center_y': .4}
+        bold: True
+
+    MDLabel:
+        id: program_level
+        text: ""
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: "#F1B20B"
+        pos_hint: {'center_x': 1.05, 'center_y': .37}
+        bold: True
+
+    MDLabel:
+        id: location_id
+        text: ""
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: "#F1B20B"
+        pos_hint: {'center_x': 1.05, 'center_y': .34}
+        bold: True
+
+    MDTextButton:
+        text: "Edit Setup"
+        # md_bg_color: 0, 0, 0, 0
+        color: 1, 1, 1, 1
+        size_hint: .4, .06
+        halign: "center"
+        font_name: "fonts/Poppins-Medium.ttf"
+        pos_hint: {"center_x": .5, "center_y": .29}
+        font_size: '12sp'
+        on_release:
+            app.setup_program_dialog()
+
+    MDLabel:
+        text: "What would you like to do?"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'center'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-SemiBold.ttf"
+        color: "#b3b3b3"
+        pos_hint: {'center_x': .5, 'center_y': .21}
+        # bold: True
+
+
+
+    MDTextButton:
+        text: "Attendance"
+        font_size: "12sp"
+        font_name: "fonts/Poppins-Medium.ttf"
+        color: 1, 1, 1, 1
+        # size_hint_y: .9
+        pos_hint: {"center_x": .2, "center_y": .15}
+        on_release:
+            app.change_screen("attendance")
+            app.add_screen_2list("home")
+            #app.get_worker_details()
+
+    MDTextButton:
+        text: "Count"
+        font_size: "12sp"
+        font_name: "fonts/Poppins-Medium.ttf"
+        color: 1, 1, 1, 1
+        # size_hint_y: .9
+        pos_hint: {"center_x": .5, "center_y": .15}
+        on_release:
+            app.change_screen("counter")
+            app.add_screen_2list("home")
+
+
+    MDTextButton:
+        text: "Registration"
+        font_size: "12sp"
+        font_name: "fonts/Poppins-Medium.ttf"
+        color: 1, 1, 1, 1
+        # size_hint_y: .9
+        pos_hint: {"center_x": .8, "center_y": .15}
+        on_release:
+            app.change_screen("record")
+            app.add_screen_2list("home")
+
+
+    MDRaisedButton:
+        text: "Logout"
+        md_bg_color: app.theme_cls.primary_color
+        size_hint: .35, .05
+        font_size: "12sp"
+        font_name: "fonts/Poppins-Medium.ttf"
+        pos_hint: {"center_x": .5, "center_y": .05}
+        # bold: True
+        on_release:
+            app.confirm_logout_dialog()
+
+

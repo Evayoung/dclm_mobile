@@ -1,0 +1,94 @@
+<SettingsScreenView>:
+    MDBoxLayout:
+        md_bg_color: app.theme_cls.bg_normal
+
+    MDBoxLayout:
+        size_hint_y: .1
+        spacing: 20
+        padding: 10
+        md_bg_color: app.theme_cls.primary_color
+        pos_hint: {"top": 1}
+        orientation: "horizontal"
+
+    MDIconButton:
+        icon: "arrow-left"
+        icon_size: "20dp"
+        size_hint: None, None
+        size: (45, 45)
+        icon_color: 1, 1, 1, 1
+        user_font_size: '12sp'
+        theme_text_color: "Custom"
+        #text_color: app.theme_cls.primary_color
+        pos_hint: {'center_x': .09, 'center_y': .96}
+        on_release:
+            app.change_screen("home")
+
+    MDLabel:
+        text: "Application Settings"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '16sp'
+        font_name: "fonts/Poppins-SemiBold.ttf"
+        color: "white"
+        pos_hint: {'center_x': .65, 'center_y': .96}
+        bold: True
+
+    MDLabel:
+        text: "Edit the server URL:"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '12sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: app.theme_cls.primary_color
+        pos_hint: {'center_x': .57, 'center_y': .87}
+
+
+    MDBoxLayout:
+        size_hint: .78, .065
+        padding: [10, 0, 5, 0]
+        radius: [10]
+        pos_hint: {'center_x': 0.45, 'center_y': 0.82}
+        #md_bg_color: app.theme_cls.accent_color
+        canvas.before:
+            Color:
+                rgb: 204/255, 204/255, 204/255
+            Line:
+                width: 0.5
+                rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+        TextInput:
+            id: api_url
+            text: ''
+            hint_text: "ENTER API URL"
+            size_hint: .88, None
+            pos_hint: {"center_x": .46, 'center_y': .5}
+            height: self.minimum_height
+            multiline: False
+            cursor_width: "2sp"
+            font_size: "12sp"
+            password: True
+            font_name: "fonts/Poppins-Regular.ttf"
+            foreground_color: 104/255, 104/255, 104/255
+            background_color: 0, 0, 0, 0
+            readonly: True
+            #on_text: app.validate_hospital_id(*args)
+            #on_focus: app.validate_when_focus(*args)
+
+
+
+    MDTextButton:
+        id: edit_url_btn
+        text: "Edit"
+        font_size: "12sp"
+        color: app.theme_cls.primary_color
+        size_hint: .15, .06
+        pos_hint: {"center_x": .96, "center_y": .82}
+        bold: True
+        on_release: app.show_url_editor()
+
+
+    MDSeparator:
+        size_hint: .9, None
+        pos_hint: {"center_x": .5, "center_y": .77}

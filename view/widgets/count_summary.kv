@@ -1,0 +1,357 @@
+<CountSummary>:
+    size_hint: 1, None
+    height: "300dp"
+    md_bg_color: "white"
+    orientation: "vertical"
+    #pos_hint: {"center": (.5, .5)}
+    padding: [0, 0, 0, 10]
+
+    MDLabel:
+        id: program_title
+        text: "Impact Academy"
+        pos_hint: {'center': (.5, 1)}
+        halign: 'center'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: app.theme_cls.primary_color
+        bold: True
+
+    MDBoxLayout:
+        orientation: "horizontal"
+        size_hint: 1, .1
+        pos_hint: {'center': (.5, .9)}
+        MDLabel:
+            id: program_type
+            text: "Crusade"
+            pos_hint: {'center_x': .5}
+            halign: 'left'
+            font_size: '11sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+            color: app.theme_cls.primary_color
+            bold: True
+
+        MDLabel:
+            id: program_date
+            text: "12-10-2023"
+            pos_hint: {'center_x': .5}
+            halign: 'right'
+            font_size: '11sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+            color: app.theme_cls.primary_color
+            bold: True
+
+    MDSeparator:
+        size_hint_x: 1
+        size_hint_y: None
+        height: 1
+        pos_hint: {'center_x': .5, 'center_y': .86}
+        md_bg_color: app.theme_cls.primary_color
+
+    MDLabel:
+        text: "Adult"
+        pos_hint: {'center_x': .5, 'center_y': .81}
+        halign: 'left'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: app.theme_cls.primary_color
+        bold: True
+
+    MDBoxLayout:
+        orientation: "vertical"
+        size_hint: .5, .15
+        spacing: 5
+        padding: [0, 10, 0, 10]
+        pos_hint: {'center': (.35, .77)}
+
+        MDLabel:
+            id: total_pop
+            text: "45%"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: 204/255, 153/255, 51/255, 1
+            bold: True
+
+        MDLabel:
+            text: "120"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: 204/255, 153/255, 51/255, 1
+            bold: True
+
+    MDBoxLayout:
+        orientation: "vertical"
+        size_hint: .5, .15
+        spacing: 5
+        padding: [0, 10, 0, 10]
+        pos_hint: {'center': (.75, .77)}
+
+        MDLabel:
+            id: total_pop
+            text: "45%"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: 204/255, 153/255, 51/255, 1
+            bold: True
+
+        MDLabel:
+            text: "120"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: 204/255, 153/255, 51/255, 1
+            bold: True
+
+    MDSeparator:
+        size_hint_x: 1
+        size_hint_y: None
+        height: 1
+        pos_hint: {'center_x': .5, 'center_y': .68}
+        md_bg_color: app.theme_cls.primary_color
+
+    MDLabel:
+        text: "Youth"
+        pos_hint: {'center_x': .5, 'center_y': .63}
+        halign: 'left'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: app.theme_cls.primary_color
+        bold: True
+
+    MDBoxLayout:
+        orientation: "vertical"
+        size_hint: .5, .15
+        spacing: 5
+        padding: [0, 10, 0, 10]
+        pos_hint: {'center': (.35, .59)}
+
+        MDLabel:
+            id: total_pop
+            text: "45%"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: 153/255, 51/255, 102/255, 1
+            bold: True
+
+        MDLabel:
+            text: "120"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: 153/255, 51/255, 102/255, 1
+            bold: True
+
+    MDBoxLayout:
+        orientation: "vertical"
+        size_hint: .5, .15
+        spacing: 5
+        padding: [0, 10, 0, 10]
+        pos_hint: {'center': (.75, .59)}
+
+        MDLabel:
+            id: total_pop
+            text: "45%"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: 153/255, 51/255, 102/255, 1
+            bold: True
+
+        MDLabel:
+            text: "120"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: 153/255, 51/255, 102/255, 1
+            bold: True
+
+
+
+    MDSeparator:
+        size_hint_x: 1
+        size_hint_y: None
+        height: 1
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        md_bg_color: app.theme_cls.primary_color
+
+    MDLabel:
+        text: "Children"
+        pos_hint: {'center_x': .5, 'center_y': .45}
+        halign: 'left'
+        font_size: '11sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: app.theme_cls.primary_color
+        bold: True
+
+    MDBoxLayout:
+        orientation: "vertical"
+        size_hint: .5, .15
+        spacing: 5
+        padding: [0, 10, 0, 10]
+        pos_hint: {'center': (.35, .4)}
+
+        MDLabel:
+            id: total_pop
+            text: "45%"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: 51/255, 102/255, 153/255, 1
+            bold: True
+
+        MDLabel:
+            text: "120"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: 51/255, 102/255, 153/255, 1
+            bold: True
+
+    MDBoxLayout:
+        orientation: "vertical"
+        size_hint: .5, .15
+        spacing: 5
+        padding: [0, 10, 0, 10]
+        pos_hint: {'center': (.75, .4)}
+
+        MDLabel:
+            id: total_pop
+            text: "45%"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: 51/255, 102/255, 153/255, 1
+            bold: True
+
+        MDLabel:
+            text: "120"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: 51/255, 102/255, 153/255, 1
+            bold: True
+
+
+    MDSeparator:
+        size_hint_x: 1
+        size_hint_y: None
+        height: 1
+        pos_hint: {'center_x': .5, 'center_y': .32}
+        md_bg_color: app.theme_cls.primary_color
+
+    MDBoxLayout:
+        orientation: "horizontal"
+        size_hint: .45, .2
+        padding: [10, 0, 10, 0]
+        spacing: 5
+        pos_hint: {'center': (.45, .27)}
+        MDLabel:
+            text: "Male"
+            size: self.texture_size
+            pos_hint: {'center_x': .5}
+            halign: 'left'
+            font_size: '11sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+            color: app.theme_cls.primary_color
+            bold: True
+
+        MDLabel:
+            id: male_total
+            text: "367"
+            size: self.texture_size
+            pos_hint: {'center_x': .5}
+            halign: 'left'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+            color: app.theme_cls.primary_color
+            bold: True
+
+    MDBoxLayout:
+        orientation: "horizontal"
+        size_hint: .45, .2
+        spacing: 5
+        padding: [10, 0, 10, 0]
+        pos_hint: {'center': (.8, .27)}
+        MDLabel:
+            text: "Female"
+            size: self.texture_size
+            pos_hint: {'center_x': .5}
+            halign: 'right'
+            font_size: '11sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+            color: app.theme_cls.primary_color
+            bold: True
+
+        MDLabel:
+            id: female_total
+            text: "400"
+            size: self.texture_size
+            pos_hint: {'center_x': .5}
+            halign: 'right'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+            color: app.theme_cls.primary_color
+            bold: True
+
+
+    MDSeparator:
+        size_hint_x: 1
+        size_hint_y: None
+        height: 1
+        pos_hint: {'center_x': .5, 'center_y': .22}
+        md_bg_color: app.theme_cls.primary_color
+
+    MDBoxLayout:
+        orientation: "vertical"
+        size_hint: .5, .2
+        spacing: 5
+        padding: [0, 15, 0, 10]
+        pos_hint: {'center': (.5, .07)}
+
+        MDLabel:
+            id: total_pop
+            text: "1200"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '16sp'
+            font_name: "fonts/Poppins-SemiBold.ttf"
+            color: app.theme_cls.primary_color
+            bold: True
+
+        MDLabel:
+            text: "Population Total"
+            size: self.texture_size
+            #pos_hint: {'center_x': .5}
+            halign: 'center'
+            font_size: '11sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+            color: app.theme_cls.primary_color
+            bold: True

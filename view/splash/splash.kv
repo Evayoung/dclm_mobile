@@ -1,0 +1,55 @@
+<SplashScreenView>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background.png'
+
+    MDBoxLayout:
+        md_bg_color: 0, 0, 0, .7
+        orientation: 'vertical'
+        spacing: 20
+        padding: 20
+
+    Image:
+        id: img
+        pos_hint: {'center_x': .5, 'center_y': .6}
+        source: 'images/logo.png'
+        size_hint_x: .26
+
+    MDLabel:
+        text: "DCLM"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        size_hint_y: .06
+        halign: 'center'
+        font_size: '25sp'
+        font_name: "fonts/Poppins-SemiBold.ttf"
+        color: 'white'
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        bold: True
+
+    MDLabel:
+        text: "Utility App"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        size_hint_y: .06
+        halign: 'center'
+        font_size: '17sp'
+        font_name: "fonts/Poppins-Regular.ttf"
+        color: 'white'
+        pos_hint: {'center_x': .5, 'center_y': .46}
+        bold: True
+
+    MDBoxLayout:
+        id: btn_anim_hold
+
+    MDRaisedButton:
+        text: "Proceed"
+        md_bg_color: app.theme_cls.primary_color
+        size_hint: .4, .06
+        pos_hint: {"center_x": .5, "center_y": .2}
+        bold: True
+        on_release:
+            app.change_screen("login")
+            app.add_screen_2list("splash")

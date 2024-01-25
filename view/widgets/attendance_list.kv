@@ -1,0 +1,21 @@
+<ListItemWithCheckbox>:
+    id: the_list_item
+    markup: True
+    text: "Olorundare Micheal"
+    color: 'yellow'
+    secondary_text: "KWR-ADN-RU7823J6"
+    font_size: '10sp'
+    font_name: "fonts/Poppins-Regular.ttf"
+    md_bg_color: "white"
+
+    RightCheckbox:
+        id: check
+        on_release: app.mark(check, the_list_item)
+    ImageLeftWidget:
+        id: img
+        source: 'images/brother.png'
+        icon_size: "35dp"
+        theme_text_color: "Custom"
+        text_color: 1, 0, 0, 1
+        on_release: app.show_worker_details(the_list_item.secondary_text)
+

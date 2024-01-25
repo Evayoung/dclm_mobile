@@ -1,0 +1,95 @@
+<GetWorker>:
+    orientation: "vertical"
+    spacing: "10dp"
+    size_hint: 1, None
+    padding: 0
+    height: "130dp"
+
+    GridLayout:
+        rows: 5
+        cols: 2
+        spacing: 20
+        MDLabel:
+            spacing: "10dp"
+            text: "Leader's Id: "
+            size_hint_x: .4
+            halign: "right"
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+
+        MDLabel:
+            spacing: "10dp"
+            id: user_id
+            halign: "left"
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+
+        MDLabel:
+            spacing: "10dp"
+            text: "Full Name: "
+            size_hint_x: .4
+            halign: "right"
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+
+        MDLabel:
+            spacing: "10dp"
+            id: fullname
+            halign: "left"
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+
+
+        MDLabel:
+            spacing: "10dp"
+            text: "Loc ID: "
+            size_hint_x: .4
+            halign: "right"
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+
+        MDLabel:
+            spacing: "10dp"
+            id: location_id
+            halign: "left"
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+
+        MDLabel:
+            spacing: "10dp"
+            text: "Units: "
+            size_hint_x: .4
+            halign: "right"
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+
+        MDLabel:
+            spacing: "10dp"
+            id: units
+            halign: "left"
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+
+        MDLabel:
+            spacing: "10dp"
+            text: "Email: "
+            size_hint_x: .4
+            halign: "right"
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+
+        MDLabel:
+            spacing: "10dp"
+            id: email
+            halign: "left"
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Regular.ttf"
+
+
+    BoxLayout:
+        orientation: "horizontal"
+
+        MDFlatButton:
+            text: "Close"
+            on_release: app.close_worker_details()
+            pos_hint: {"x": .8}
