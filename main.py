@@ -41,7 +41,7 @@ from view.workers.workers import WorkersScreenView
 Builder.load_file("view/splash/splash.kv")
 
 # Window.size = (400, 700)
-Window.size = (350, 660)
+# Window.size = (350, 660)
 
 # color schema
 colors = {
@@ -603,8 +603,8 @@ class DCLMCounter(MDApp):
             self.wm.screens[3].ids['pending_data_count'].text = str(self.pending)
 
     def vibrate_now(self, *args):
-        pass
-        # vibrator.vibrate(time=0.1)
+        # pass
+        vibrator.vibrate(time=0.1)
 
     # ===================== this functions update labels or widget within the application interface ===================
     def update_counter_title(self, title):
