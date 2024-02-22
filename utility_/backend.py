@@ -99,6 +99,28 @@ def create_online_con_record(payload, token):
     return response
 
 
+def generate_worker_id(payload):
+    """ This make request to the server to generate the worker's ID """
+    end_point = f"{url}/workers/generate_id"
+
+    payload_json = json.dumps(payload)
+
+    response = requests.post(end_point, data=payload_json)
+
+    return response
+
+
+def create_new_worker(payload):
+    """ This make a post request to the server to submit the workers data for registration """
+    end_point = f"{url}/workers/"
+
+    payload_json = json.dumps(payload)
+
+    response = requests.post(end_point, data=payload_json)
+
+    return response
+
+
 # ####################################################################################################################
 #                                           OFFLINE DATABASE
 # ####################################################################################################################
@@ -108,6 +130,7 @@ conn = sqlite3.connect('database/workers.db')
 
 # Create a cursor object to interact with the database
 
+# ############################################### CREATE FUNCTION ###################################################
 
 # Create a table to store worker details
 def create_worker():
@@ -155,9 +178,6 @@ def create_attendance():
         print(e)
 
 
-create_attendance()
-
-
 def create_offline_count():
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS counter(
@@ -178,9 +198,6 @@ def create_offline_count():
         )
         """)
     conn.commit()
-
-
-create_offline_count()
 
 
 def create_offline_convert():
@@ -211,9 +228,6 @@ def create_offline_convert():
     conn.commit()
 
 
-create_offline_convert()
-
-
 def create_user_log():
     cursor = conn.cursor()
     cursor.execute("""
@@ -227,6 +241,63 @@ def create_user_log():
     """)
 
     conn.commit()
+
+
+def create_attendance_count():
+    cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS attendance_taken(
+        id INTEGER PRIMARY KEY,
+        worker_id TEXT UNIQUE
+        )
+    """)
+
+    conn.commit()
+
+
+def create_program_setup():
+    cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS setup(
+        id INTEGER PRIMARY KEY,
+        program_domain TEXT UNIQUE,
+        program_type TEXT,
+        program_level TEXT,
+        program_location TEXT
+        )
+    """)
+
+    conn.commit()
+
+
+# ################################################# INSERT FUNCTION ##############################################
+
+def insert_attendance_count(worker_id):
+    cursor = conn.cursor()
+    try:
+        cursor.execute("""INSERT INTO attendance_taken (worker_id) VALUES(?)
+        """, (worker_id,))
+        conn.commit()
+        return True
+
+    except Exception as e:
+        conn.rollback()
+        return False
+
+
+def insert_setup(program_domain, program_type, program_level, program_location):
+    """ this collect the setup data for data submissions """
+    cursor = conn.cursor()
+    try:
+        cursor.execute("""INSERT INTO setup (program_domain, program_type, program_level, program_location) 
+        VALUES( ?, ?, ?, ?)
+        """, (program_domain, program_type, program_level, program_location,))
+        conn.commit()
+        return True
+
+    except Exception as e:
+        conn.rollback()
+        return False
 
 
 def insert_offline_count(payload):
@@ -294,9 +365,29 @@ def insert_attendance(payload):
                   payload['email'], payload['unit'], payload['church_id'], payload['local_church'], payload['status']))
 
         conn.commit()
-    except sqlite3.IntegrityError:
+    except sqlite3.IntegrityError as e:
+        print(e)
         conn.rollback()
 
+
+def insert_worker(user_id, location_id, location, name, gender, phone, email, unit):
+    print("i was here")
+    print(user_id, location_id, location, name, gender, phone, email, unit)
+    cursor = conn.cursor()
+    try:
+        # Insert a new worker's details into the table, ignoring if user_id already exists
+        cursor.execute('''
+                INSERT OR IGNORE INTO workers (
+                    user_id, location_id, location, name, gender, phone, email, unit
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (user_id, location_id, location, name, gender, phone, email, unit))
+
+        conn.commit()
+    except sqlite3.IntegrityError:
+        conn.rollback()  # Rollback transaction if user_id already
+
+
+# ############################################# UPDATE FUNCTION ######################################################
 
 def update_attendance(program_domain, program_type, location, location_id, date, status, worker_id):
     cursor = conn.cursor()
@@ -312,20 +403,7 @@ def update_attendance(program_domain, program_type, location, location_id, date,
         conn.rollback()
 
 
-def insert_worker(user_id, location_id, location, name, gender, phone, email, unit):
-    cursor = conn.cursor()
-    try:
-        # Insert a new worker's details into the table, ignoring if user_id already exists
-        cursor.execute('''
-                INSERT OR IGNORE INTO workers (
-                    user_id, location_id, location, name, gender, phone, email, unit
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (user_id, location_id, location, name, gender, phone, email, unit))
-
-        conn.commit()
-    except sqlite3.IntegrityError:
-        conn.rollback()  # Rollback transaction if user_id already exists
-
+# ############################################# SELECT FUNCTION ######################################################
 
 def search_workers_by_params(location_id=None,
                              location=None,
@@ -396,6 +474,60 @@ def select_all_attendance():
     return query
 
 
+def offline_login(payload):
+    cursor = conn.cursor()
+    print(payload['username'])
+    query = cursor.execute("""SELECT * FROM users WHERE email = ?""",
+                           (payload['username'],)).fetchone()
+    return query
+
+
+def get_counts():
+    cursor = conn.cursor()
+    data = cursor.execute("""SELECT * FROM counter""").fetchall()
+    return data
+
+
+def get_registration():
+    cursor = conn.cursor()
+    data = cursor.execute("""SELECT * FROM record""").fetchall()
+    return data
+
+
+def fetch_setup(id_):
+    cursor = conn.cursor()
+    query = cursor.execute("""SELECT * FROM setup """).fetchall()
+    return query
+
+
+def fetch_attendance_count():
+    cursor = conn.cursor()
+    query = cursor.execute("""SELECT worker_id FROM attendance_taken """).fetchall()
+    return query
+
+
+def select_each_count(id_):
+    cursor = conn.cursor()
+    response = cursor.execute("SELECT * FROM counter WHERE id = ?", (id_,)).fetchone()
+    return response
+
+
+def select_each_reg(id_):
+    cursor = conn.cursor()
+    response = cursor.execute("SELECT * FROM record WHERE id = ?", (id_,)).fetchone()
+    return response
+
+
+# ################################################ DELETE FUNCTION ###############################################
+
+
+def delete_registration(id_):
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM record WHERE id = ?", (id_,))
+    conn.commit()
+    return True
+
+
 def delete_all_attendance():
     cursor = conn.cursor()
     try:
@@ -413,20 +545,6 @@ def delete_one_attendance(user_id):
     return True
 
 
-def offline_login(payload):
-    cursor = conn.cursor()
-    print(payload['username'])
-    query = cursor.execute("""SELECT * FROM users WHERE email = ?""",
-                           (payload['username'],)).fetchone()
-    return query
-
-
-def get_counts():
-    cursor = conn.cursor()
-    data = cursor.execute("""SELECT * FROM counter""").fetchall()
-    return data
-
-
 def delete_counts(id_):
     try:
         cursor = conn.cursor()
@@ -437,26 +555,26 @@ def delete_counts(id_):
         print(e)
 
 
-def get_registration():
+def delete_all_taken_attendance():
     cursor = conn.cursor()
-    data = cursor.execute("""SELECT * FROM record""").fetchall()
-    return data
+    try:
+        query = cursor.execute("DELETE FROM attendance_taken")
+        conn.commit()
+    except Exception as e:
+        return str(e)
 
 
-def delete_registration(id_):
+def delete_setup():
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM record WHERE id = ?", (id_,))
+    try:
+        query = cursor.execute("DELETE FROM setup")
+        conn.commit()
+    except Exception as e:
+        return str(e)
+
+
+def delete_an_attendance(worker_id):
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM attendance_taken WHERE worker_id = ?", (worker_id,))
     conn.commit()
     return True
-
-
-def select_each_count(id_):
-    cursor = conn.cursor()
-    response = cursor.execute("SELECT * FROM counter WHERE id = ?", (id_,)).fetchone()
-    return response
-
-
-def select_each_reg(id_):
-    cursor = conn.cursor()
-    response = cursor.execute("SELECT * FROM record WHERE id = ?", (id_,)).fetchone()
-    return response

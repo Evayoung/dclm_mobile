@@ -1,4 +1,5 @@
 <SignupScreenView>:
+    id: blur
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -11,10 +12,36 @@
         spacing: 20
         padding: 20
 
+    MDIconButton:
+        icon: "arrow-left"
+        icon_size: "20dp"
+        size_hint: None, None
+        size: (45, 45)
+        icon_color: "white"
+        user_font_size: '12sp'
+        theme_text_color: "Custom"
+        #text_color: 204/255, 204/255, 204/255
+        pos_hint: {'center_x': .09, 'center_y': .96}
+        on_release:
+            app.change_screen("login")
+            app.remove_screen_4rm_list()
+
+    MDLabel:
+        id: record_title
+        text: "User Registration Form"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '16sp'
+        font_name: "fonts/Poppins-SemiBold.ttf"
+        color: 204/255, 204/255, 204/255
+        pos_hint: {'center_x': .65, 'center_y': .96}
+        bold: True
 
 
     MDBoxLayout:
-        size_hint: .8, .065
+        size_hint: .8, None
+        height: dp(45)
         padding: [10, 0, 20, 0]
         radius: [10]
         pos_hint: {'center_x': 0.5, 'center_y': 0.75}
@@ -55,7 +82,8 @@
 
 
     MDBoxLayout:
-        size_hint: .8, .065
+        size_hint: .8, None
+        height: dp(45)
         padding: [10, 0, 20, 0]
         radius: [10]
         pos_hint: {'center_x': 0.5, 'center_y': 0.63}
@@ -86,7 +114,8 @@
 
 
     MDBoxLayout:
-        size_hint: .8, .065
+        size_hint: .8, None
+        height: dp(45)
         padding: [10, 0, 20, 0]
         radius: [10]
         pos_hint: {'center_x': 0.5, 'center_y': 0.54}
@@ -117,7 +146,8 @@
 
 
     MDBoxLayout:
-        size_hint: .8, .065
+        size_hint: .8, None
+        height: dp(45)
         padding: [10, 0, 15, 0]
         radius: [10]
         pos_hint: {'center_x': 0.5, 'center_y': 0.45}
@@ -148,7 +178,8 @@
 
 
     MDBoxLayout:
-        size_hint: .8, .065
+        size_hint: .8, None
+        height: dp(45)
         padding: [10, 0, 20, 0]
         radius: [10]
         pos_hint: {'center_x': 0.5, 'center_y': 0.36}
@@ -178,7 +209,8 @@
             #on_focus: app.validate_when_focus(*args)
 
     MDBoxLayout:
-        size_hint: .8, .065
+        size_hint: .8, None
+        height: dp(45)
         padding: [10, 0, 10, 0]
         radius: [10]
         pos_hint: {'center_x': 0.5, 'center_y': 0.27}
@@ -204,7 +236,7 @@
             font_name: "fonts/Poppins-Regular.ttf"
             foreground_color: 204/255, 204/255, 204/255
             background_color: 0, 0, 0, 0
-            # readonly: True
+            password: True
             #on_text: app.validate_hospital_id(*args)
             #on_focus: app.validate_when_focus(*args)
 
@@ -216,19 +248,20 @@
         pos_hint: {"center_x": .5, "center_y": .12}
         bold: True
         on_release:
-            #app.change_screen("home")
             app.create_user_account(loc_id=location_id.text, name=user_name.text, phone=user_phone.text,
             email=user_email.text, password=user_password.text, user_id=user_id.text)
 
     MDTextButton:
-        text: "Login Instead >"
+        text: "+ Create Worker"
         font_size: "12sp"
         font_name: "fonts/Poppins-Regular.ttf"
         color: 1, 1, 1, 1
         # size_hint_y: .9
         pos_hint: {"center_x": .5, "center_y": .05}
         on_release:
-            app.change_screen("login")
+            app.change_screen("workers")
+            app.add_screen_2list("signup")
+
 
     MDProgressBar:
         size_hint_x: 1

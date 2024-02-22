@@ -3,6 +3,7 @@ import os
 import pickle
 import threading
 from datetime import datetime
+import asyncio
 from plyer import vibrator
 
 from kivy.clock import Clock
@@ -35,12 +36,12 @@ from view.settings.setting import SettingsScreenView
 from view.signup.signup import SignupScreenView
 from view.splash.splash import SplashScreenView
 from view.viewdata.viewdata import ViewdataScreenView
-
+from view.workers.workers import WorkersScreenView
 
 Builder.load_file("view/splash/splash.kv")
 
 # Window.size = (400, 700)
-#Window.size = (350, 660)
+Window.size = (350, 660)
 
 # color schema
 colors = {
@@ -84,10 +85,10 @@ class RightCheckbox(IRightBody, MDCheckbox):
 
 
 class SubmitData(MDBoxLayout):
-    p_domain = StringProperty("Global Crusade")
-    p_type = StringProperty("Minister's Conference")
-    l_name = StringProperty("Living Spring")
-    l_id = StringProperty("AF-234-KWA-ILO-ILE-001")
+    p_domain = StringProperty()
+    p_type = StringProperty()
+    l_name = StringProperty()
+    l_id = StringProperty()
 
 
 class GetWorker(MDBoxLayout):
@@ -101,8 +102,22 @@ class GetWorker(MDBoxLayout):
 
 
 class AttendanceSetup(MDBoxLayout):
-    def __init__(self, **kwargs):
+    def __init__(self, get_all, gender, units, loc_id, **kwargs):
         super().__init__(**kwargs)
+        if get_all:
+            self.ids.all_workers.active = True
+
+        if loc_id:
+            self.ids.check_location.active = True
+            self.ids.by_location.text = loc_id
+
+        if gender:
+            self.ids.check_gender.active = True
+            self.ids.by_gender.text = gender
+
+        if units:
+            self.ids.check_units.active = True
+            self.ids.by_units.text = units
 
     def use_id(self, checkbox, value):
         if value:
@@ -495,6 +510,7 @@ class DCLMCounter(MDApp):
     confirm_submit_Dialog = None
     worker_details_dialog = None
     attendance_setup_dialog = None
+    admin_dialog = None
     confirm_get_worker = None
     menu_drop = None
     check_offline_data = True
@@ -506,17 +522,25 @@ class DCLMCounter(MDApp):
     program_id = None
     convert_type = None
 
+    login = False
+    submit = False
+    url_dialog = None
+    edit_url = False
+
     gen_animate = True
     access_token = ''
     author = ''
 
-    worker_on = True
+    worker_on = None
     location_id_ = None
     gender_ = None
     unit_ = None
     internet = True
     pending = 0
+    submitted_count = 0
+    not_submitted_count = 0
     marked_data = []
+    a, b, c, d, e, f, g = 0, 0, 0, 0, 0, 0, 0
 
     def build(self):
         ''' Initializes the Application
@@ -539,7 +563,8 @@ class DCLMCounter(MDApp):
             RecordScreenView(name='record'),
             ViewdataScreenView(name='pending'),
             AttendanceScreenView(name='attendance'),
-            SettingsScreenView(name='settings')
+            SettingsScreenView(name='settings'),
+            WorkersScreenView(name='workers')
 
         ]
 
@@ -550,10 +575,13 @@ class DCLMCounter(MDApp):
         return self.wm
 
     def on_start(self):
-        self.create_pickle_file()
+        Window.softinput_mode = "below_target"
+        Window.bind(on_keyboard=self.back_button)
+        # self.create_pickle_file()
         self.administer_setup()
         self.call_config()
         # self.change_pics()
+        Clock.schedule_once(self.load_remember_me, 1)
         Clock.schedule_once(self.update_pending, 1)
 
     def change_screen(self, screen):
@@ -574,15 +602,16 @@ class DCLMCounter(MDApp):
         if self.pending:
             self.wm.screens[3].ids['pending_data_count'].text = str(self.pending)
 
-    def vibrate_now(self):
-        vibrator.vibrate(time=0.1)
+    def vibrate_now(self, *args):
+        pass
+        # vibrator.vibrate(time=0.1)
 
-# ======================== this functions update labels or widget within the application interface ====================
+    # ===================== this functions update labels or widget within the application interface ===================
     def update_counter_title(self, title):
         self.wm.screens[0].ids['counter_title'].text = title
 
-# ========================================== this creates the home menu list ==========================================
-#     pics = ["images/lm.png", "images/mbs.png", "images/trh.png", "images/sws.png", "images/wm.png"]
+    # ======================================== this creates the home menu list ========================================
+    #     pics = ["images/lm.png", "images/mbs.png", "images/trh.png", "images/sws.png", "images/wm.png"]
 
     def menu_dropdown(self):  # drop down to select the user role
         self.menu_list = [
@@ -612,7 +641,7 @@ class DCLMCounter(MDApp):
         self.change_screen(data)
         self.menu_drop.dismiss()
 
-# ===============================================> Confirm user logout <==============================================
+    # ===============================================> Confirm user logout <===========================================
     def confirm_logout_dialog(self, *args):
         if not self.logout_dialog:
             self.logout_dialog = MDDialog(
@@ -645,7 +674,7 @@ class DCLMCounter(MDApp):
         # self.wm.screens[2].ids['login_btn'].disabled = False
         self.change_screen('login')
 
-# =======================================> list count item dialog box <===============================================
+    # =======================================> list count item dialog box <============================================
     def view_count_dialog(self, *args):
         if not self.countItem_Dialog:
             self.countItem_Dialog = MDDialog(
@@ -670,14 +699,15 @@ class DCLMCounter(MDApp):
     def close_count_view(self, *args):
         self.countItem_Dialog.dismiss()
 
-# =======================================> setup Attendance for workers <==============================================
+    # =======================================> setup Attendance for workers <==========================================
     def attendance_set_dialog(self, *args):
+        self.load_filter_data()
         if not self.attendance_setup_dialog:
             self.attendance_setup_dialog = MDDialog(
                 auto_dismiss=False,
                 title='Search parameter',
                 type="custom",
-                content_cls=AttendanceSetup(),
+                content_cls=AttendanceSetup(self.worker_on, self.gender_, self.unit_, self.location_id_),
                 elevation=0,
                 md_bg_color="white",
                 padding=[0]
@@ -685,45 +715,51 @@ class DCLMCounter(MDApp):
         self.attendance_setup_dialog.open()
 
     def close_attendance_setup(self, *args):
-        self.attendance_setup_dialog.dismiss()
-        self.attendance_setup_dialog = None
+        if self.attendance_setup_dialog:
+            self.attendance_setup_dialog.dismiss()
+            self.attendance_setup_dialog = None
 
     def confirm_get_workers(self):
-        response = search_workers_by_params(get_all=True)
-        if not response:
-            self.attendance_set_dialog()
-        else:
-            if not self.confirm_get_worker:
-                self.confirm_get_dialog = MDDialog(
-                    auto_dismiss=False,
-                    text="Attendance in the local database will be lost if you change settings?",
-                    buttons=[
-                        MDFlatButton(
-                            text="Back",
-                            theme_text_color="Custom",
-                            text_color=app.theme_cls.primary_color,
-                            on_release=self.close_confirm_get,
-                        ),
+        if self.internet:
+            response = search_workers_by_params(get_all=True)
+            if not response:
+                self.attendance_set_dialog()
+            else:
+                if not self.confirm_get_worker:
+                    self.confirm_get_dialog = MDDialog(
+                        auto_dismiss=False,
+                        text="Attendance in the local database will be lost if you change settings?",
+                        buttons=[
+                            MDFlatButton(
+                                text="Back",
+                                theme_text_color="Custom",
+                                text_color=app.theme_cls.primary_color,
+                                on_release=self.close_confirm_get,
+                            ),
 
-                        MDFlatButton(
-                            text="Continue",
-                            theme_text_color="Custom",
-                            text_color=app.theme_cls.primary_color,
-                            on_release=self.continue_get_workers,
-                        )
-                    ]
-                )
-                self.confirm_get_dialog.open()
-                # self.confirm_get_dialog.
+                            MDFlatButton(
+                                text="Continue",
+                                theme_text_color="Custom",
+                                text_color=app.theme_cls.primary_color,
+                                on_release=self.continue_get_workers,
+                            )
+                        ]
+                    )
+                    self.confirm_get_dialog.open()
+                    # self.confirm_get_dialog.
+                else:
+                    toast("This is available in internet mode only")
 
     def close_confirm_get(self, *args):
         self.confirm_get_dialog.dismiss()
 
     def continue_get_workers(self, *args):
         self.confirm_get_dialog.dismiss()
+        delete_all_taken_attendance()
+        self.update_attendance_count()
         self.attendance_set_dialog()
 
-# =======================================> setup program dialog box <=================================================
+    # =======================================> setup program dialog box <==============================================
     def setup_program_dialog(self, *args):
         if self.menu_drop:
             self.menu_drop.dismiss()
@@ -764,7 +800,7 @@ class DCLMCounter(MDApp):
 
         self.administer_setup()
 
-# =======================================> setup program dialog box <=================================================
+    # =======================================> setup program dialog box <==============================================
     def edit_count_dialog(self, *args):
         if not self.edit_count_Dialog:
             self.edit_count_Dialog = MDDialog(
@@ -792,11 +828,14 @@ class DCLMCounter(MDApp):
         self.wm.screens[4].ids["girls"].text = f
         self.add_count()
 
-# =======================================> Confirm Submit data Dialog <===============================================
+    # =======================================> Confirm Submit data Dialog <============================================
     def confirm_submit_dialog(self, *args):
         date = self.wm.screens[4].ids["set_date"].text
         if not self.g:
             toast("You can't submit an empty count")
+            return
+        if (self.program_domain or self.program_type or self.program_level or self.program_id) == '':
+            toast("Please set the location identities")
             return
 
         if not date:
@@ -835,7 +874,7 @@ class DCLMCounter(MDApp):
         self.confirm_submit_Dialog.dismiss()
         self.confirm_submit_Dialog = None
 
-# ===============================================> confirm reset counter (counter) <==================================
+    # ============================================> confirm reset counter (counter) <==================================
     def confirm_reset_dialog(self, *args):
         if not self.reset_dialog:
             self.reset_dialog = MDDialog(
@@ -865,26 +904,35 @@ class DCLMCounter(MDApp):
         self.reset_dialog.dismiss()
         self.reset_counter()
 
-# this region is where the pickle file and all other document files for serialization of the application will reside
-# =====================================================================================================================
+    # ===============================================> Confirm user logout <===========================================
+    def check_admin_dialog(self, data):
+        self.change_screen("workers")
+        self.add_screen_2list("home")
+
+    def close_admin_dialog(self, *args):
+        self.admin_dialog.dismiss()
+
+    # this region is where the pickle file and all other document files for serialization of the application will reside
+    # ==================================================================================================================
     def create_directory(self, directory):
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+        os.makedirs(directory)
 
     # this creates a serializing file to save the application program setup
 
     def create_pickle_file(self):
         directory = "app_data"
-        filename = 'location_setup.pkl'
-        data = {"program_domain": "",
-                "program_type": "",
-                "program_level": "",
-                "location_id": ""
-                }
-        self.create_directory(directory)
-        filepath = os.path.join(directory, filename)
-        with open(filepath, "wb") as file:
-            pickle.dump(data, file)
+        if not os.path.exists(directory):
+            filename = 'location_setup.pkl'
+            data = {"program_domain": "",
+                    "program_type": "",
+                    "program_level": "",
+                    "location_id": ""
+                    }
+            self.create_directory(directory)
+
+            filepath = os.path.join(directory, filename)
+            with open(filepath, "wb") as file:
+                pickle.dump(data, file)
 
     # this is often called to deserialize the application setup
     def read_pickle_file(self, directory, filename):
@@ -927,8 +975,6 @@ class DCLMCounter(MDApp):
 
         self.call_config()
 
-
-
     def home_display_setup(self):
         self.wm.screens[3].ids['program_domain'].text = self.program_domain
         self.wm.screens[3].ids['program_type'].text = self.program_type
@@ -947,12 +993,12 @@ class DCLMCounter(MDApp):
         else:
             self.convert_type = None
 
-# ####################################################################################################################
+    # #################################################################################################################
     def show_worker_details(self, the_list_item):
         if not self.worker_details_dialog:
-            print(the_list_item)
             details = fetch_details(the_list_item)
             self.worker_details_dialog = MDDialog(
+                auto_dismiss=False,
                 title="Worker details",
                 type="custom",
                 content_cls=GetWorker(id_=details[6], fullname=details[7], location=details[13], email=details[10],
@@ -966,9 +1012,7 @@ class DCLMCounter(MDApp):
         self.worker_details_dialog.dismiss()
         self.worker_details_dialog = None
 
-# ########################################### Edit url ############################################################
-    url_dialog = None
-    edit_url = False
+    # ########################################### Edit url ############################################################
 
     def show_url_editor(self):
         if not self.edit_url:
@@ -1018,11 +1062,9 @@ class DCLMCounter(MDApp):
         self.url_dialog = None
         self.edit_url = False
 
-    #def enforce_widget(self):
+    # def enforce_widget(self):
 
-
-# ===================================== update count data as clicked =================================================
-    a, b, c, d, e, f, g = 0, 0, 0, 0, 0, 0, 0
+    # ===================================== update count data as clicked ==============================================
 
     def add_count(self):
         self.g = self.a + self.b + self.c + self.d + self.e + self.f
@@ -1068,48 +1110,10 @@ class DCLMCounter(MDApp):
         self.wm.screens[4].ids["girls"].text = "0"
         self.wm.screens[4].ids["counter"].text = "0"
 
-# =======================================> this controls the back button <============================================
-    def add_screen_2list(self, view):
-        self.navigator.append(view)
-
-    def remove_screen_4rm_list(self, *args):
-        if self.navigator:
-            self.navigator.pop()
-
-    def back_button(self, window, key, *largs):
-        if key == 27:
-            data = self.navigator
-            print(self.navigator)
-            try:
-                self.change_screen(data[-1])
-                self.remove_screen_4rm_list()
-            except Exception as e:
-                app.stop()
-            return True
-
-    def load_screens(self, *args):
-        Builder.load_file("view/login/login.kv")
-        Builder.load_file("view/signup/signup.kv")
-        Builder.load_file("view/home/home.kv")
-        Builder.load_file("view/counter/counter.kv")
-        Builder.load_file("view/record/record.kv")
-        Builder.load_file("view/viewdata/viewdata.kv")
-        Builder.load_file("view/attendance/attendance.kv")
-        Builder.load_file("view/settings/setting.kv")
-        Builder.load_file("view/widgets/card_item.kv")
-        Builder.load_file("view/widgets/attendance_setup.kv")
-        Builder.load_file("view/widgets/count_summary.kv")
-        Builder.load_file("view/widgets/setup_reg.kv")
-        Builder.load_file("view/widgets/edit_count.kv")
-        Builder.load_file("view/widgets/submit_data.kv")
-        Builder.load_file("view/widgets/attendance_list.kv")
-        Builder.load_file("view/widgets/get_workers.kv")
-        Builder.load_file("view/widgets/get_app_apiurl.kv")
-
-    # ====================================================================================================================
+    # =================================================================================================================
     #                                   SUBMIT COUNT DATA FROM COUNTER
-    # ====================================================================================================================
-    submit = False
+    # =================================================================================================================
+
     # def add_note(self, ):
 
     def indicate_save_data(self, screen, widget):
@@ -1141,11 +1145,11 @@ class DCLMCounter(MDApp):
                 "author": self.author
             }
             if self.internet:
-                Clock.schedule_once(lambda x: self.create_count(payload, self.access_token), 1)
+                Clock.schedule_once(lambda x: self.create_count(payload, self.access_token), 2)
                 self.submit = True
                 self.indicate_save_data(4, "save_count")
             else:
-                Clock.schedule_once(lambda x: self.send_offline_db(payload), 1)
+                Clock.schedule_once(lambda x: self.send_offline_db(payload), 2)
 
     def create_count(self, payload, token):
         try:
@@ -1198,12 +1202,13 @@ class DCLMCounter(MDApp):
 
     # """*** SERVER COMMUNICATION THROUGH THE BACKEND ***"""
 
-    # ####################################################################################################################
+    # #################################################################################################################
     #                                               CREATE NEW USER
-    # ####################################################################################################################
+    # #################################################################################################################
     def create_user_account(self, loc_id, name, phone, email, password, user_id):
         # Validate payload fields before creating the user
         if all(field.strip() for field in (loc_id, name, phone, email, password, user_id)):
+            admin_type = self.assign_role(user_id)
             payload = {
                 "user_id": user_id,
                 "location_id": loc_id,
@@ -1211,12 +1216,31 @@ class DCLMCounter(MDApp):
                 "phone": phone,
                 "email": email,
                 "password": password,
-                "role": "Admin",
+                "role": admin_type,
             }
 
-            Clock.schedule_once(lambda x: self.create_now(payload), 1)
+            Clock.schedule_once(lambda x: self.create_now(payload), 2)
         else:
             toast("Please set a user password")
+
+    def assign_role(self, id_):
+        if "USR" in id_:
+            return "Usher"
+
+        elif "RER" in id_:
+            return "Regular"
+
+        elif "GER" in id_:
+            return "General Coordinator"
+
+        elif "ASR" in id_:
+            return "Associate Coordinator"
+
+        elif "GRR" in id_:
+            return "Group Coordinator"
+
+        elif "RIR" in id_:
+            return "Regional Coordinator"
 
     def create_now(self, payload):
         try:
@@ -1235,43 +1259,47 @@ class DCLMCounter(MDApp):
             toast(f"Error! could not create user, please try again")
             app.state = "stop"
 
-    # ####################################################################################################################
+    # #################################################################################################################
     #                                           GET USER DETAILS
-    # ####################################################################################################################
+    # #################################################################################################################
 
     def get_user_details(self, data):
         """ Get user details using the user email """
         if data != '':
-            app.state = "start"
             payload = data
-
-            Clock.schedule_once(lambda x: self.call_generate(payload), 1)
+            threading.Thread(target=self.call_generate, args=(payload,), daemon=True).start()
         else:
             toast('Please provide user email!')
             return
 
     def call_generate(self, payload):
+        # Clock.schedule_once(self.update_ui, 0)  # Schedule UI update immediately
+
         try:
             response = get_details(payload)
             if response.status_code == 404:
                 toast("User not found!")
-
-            if response.status_code == 200:
-                self.wm.screens[1].ids["user_id"].text = response.json().get("user_id", "")
-                self.wm.screens[1].ids["user_name"].text = response.json().get("name", "")
-                self.wm.screens[1].ids["user_phone"].text = response.json().get("phone", "")
-                self.wm.screens[1].ids["location_id"].text = response.json().get("location_id", "")
-
+            elif response.status_code == 200:
+                user_data = response.json()
+                # Update the Ui
+                Clock.schedule_once(lambda x: self.update_ui(user_data), 0)
+            else:
+                toast("Error fetching user details.")
         except requests.RequestException as e:
-            toast(f"Error processing requests.")
+            toast(f"Error processing requests: {e}")
 
-        app.state = "stop"
+    def update_ui(self, response):
+        """ Updates UI elements with retrieved user data """
 
-# ####################################################################################################################
-#                                               LOGIN USER
-# ####################################################################################################################
+        if response:
+            self.wm.screens[1].ids["user_id"].text = response.get("user_id", "")
+            self.wm.screens[1].ids["user_name"].text = response.get("name", "")
+            self.wm.screens[1].ids["user_phone"].text = response.get("phone", "")
+            self.wm.screens[1].ids["location_id"].text = response.get("location_id", "")
 
-    login = False
+    # ################################################################################################################
+    #                                               LOGIN USER
+    # ################################################################################################################
 
     def indicate_login(self, screen, name):
         button = self.wm.screens[screen].ids[f'{name}']
@@ -1285,8 +1313,6 @@ class DCLMCounter(MDApp):
             button.disabled = False
             button.text = "Login"
             button.md_bg_color = app.theme_cls.primary_color
-
-            #
 
     def update_offline(self, checkbox, value):
         self.vibrate_now()
@@ -1305,7 +1331,8 @@ class DCLMCounter(MDApp):
             if self.internet:
                 self.login = True
                 self.indicate_login(2, "login_btn")
-                Clock.schedule_once(lambda x: self.pass_login_data(payload), 2)
+                threading.Thread(target=self.pass_login_data, args=(payload,), daemon=True).start()
+                # Clock.schedule_once(lambda x: self.pass_login_data(payload), 2)
             else:
                 Clock.schedule_once(lambda x: self.pass_offline_data(payload), 1)
 
@@ -1316,26 +1343,28 @@ class DCLMCounter(MDApp):
         """ ** this is called when the user uses the app in the offline mode ** """
         try:
             response = offline_login(payload)
-            data = {
-                "user_name": response[2],
-                "user_id": response[1],
-                "user_role": response[4]
-            }
-            self.change_screen("home")
-            self.update_view(data)
+            if response:
+                data = {
+                    "user_name": response[2],
+                    "user_id": response[1],
+                    "user_role": response[4]
+                }
+                self.change_screen("home")
+                self.update_view(data)
+            else:
+                toast("Please use internet if this is your first login on the app")
         except requests.RequestException as e:
             toast("Please connect your internet, credentials not found")
-            print(e)
+            # print(e)
 
     def pass_login_data(self, payload):
         try:
-            create_worker()
-            create_user_log()
+
             response = login_user(payload)
 
             if response.status_code == 200:  # Check the status code directly
                 access_token = response.json().get('access_token')
-                insert_user(response.json())
+                Clock.schedule_once(lambda x: insert_user(response.json()), 0)
 
                 data = {
                     "user_name": response.json().get('user_name'),
@@ -1345,20 +1374,21 @@ class DCLMCounter(MDApp):
 
                 self.access_token = access_token
                 self.author = response.json().get('user_id')
-                self.change_screen("home")
-                self.update_view(data)
+
+                Clock.schedule_once(lambda x: self.update_view(data), 0)
+                Clock.schedule_once(lambda x: self.change_screen("home"), 0)
+                self.remember_me()
                 self.login = False
 
             else:
                 self.login = False
-                self.indicate_login(2, "login_btn")
+                Clock.schedule_once(lambda x: self.indicate_login(2, "login_btn"), 0)
+                Clock.schedule_once(lambda x: toast("Login failed! Please check credentials"), 0)
 
-                print("Login failed:", response.json())
-                toast("Login failed! Please check credentials")
         except requests.RequestException as e:
             self.login = False
-            self.indicate_login(2, "login_btn")
-            toast("Connection error! Please check your network.")
+            Clock.schedule_once(lambda x: self.indicate_login(2, "login_btn"), 0)
+            Clock.schedule_once(lambda x: toast("Connection error! Please check your network."), 0)
             app.state = "stop"
 
     def update_view(self, data):
@@ -1366,112 +1396,184 @@ class DCLMCounter(MDApp):
         self.wm.screens[3].ids['user_nam'].text = data['user_name']
         self.wm.screens[3].ids['user_typ'].text = data['user_role']
 
-    # ####################################################################################################################
+    # #################################################################################################################
     #                                       HANDLE WORKERS ATTENDANCE
-    # ####################################################################################################################
+    # #################################################################################################################
     attendance = []
 
     def mark(self, check, the_list_item):
-
         if check.active:
             self.vibrate_now()
             date_ = datetime.today()
             dat = date_.strftime("%Y-%m-%d")
             self.update_details(self.program_domain, self.program_type, self.program_level, self.program_id, dat,
                                 "Present", the_list_item.secondary_text)
-            self.attendance.append(the_list_item.secondary_text)
+            # self.attendance.append(the_list_item.secondary_text)
+            insert_attendance_count(the_list_item.secondary_text)
             self.update_attendance_count()
             toast(f"{the_list_item.secondary_text} is added to attendance.")
         else:
             self.update_details('', '', '', '', '',
                                 "", the_list_item.secondary_text)
-            self.attendance.remove(the_list_item.secondary_text)
+            # self.attendance.remove(the_list_item.secondary_text)
+            delete_an_attendance(the_list_item.secondary_text)
             self.update_attendance_count()
             toast(f"{the_list_item.secondary_text} was removed from attendance.")
 
     def update_attendance_count(self):
-        self.wm.screens[7].ids['total_attendance'].text = str(len(self.attendance))
+        attendance = fetch_attendance_count()
+        self.wm.screens[7].ids['total_attendance'].text = str(len(attendance))
 
     def update_details(self, program_domain, program_type, location, location_id, date, status, worker_id):
         update_attendance(program_domain, program_type, location, location_id, date, status, worker_id)
 
-    # #####################################################################################################################
+    # #################################################################################################################
     #                                   Load all workers data for attendance
-    # #####################################################################################################################
-    def get_all_workers_data(self):
-        response = search_workers_by_params(get_all=True)
-        if not response:
-            self.get_worker_details()
+    # #################################################################################################################
+    def load_filter_data(self, *args):
+        path = "app_data/worker_filter.json"
+        data = self.load_json_files(path)
+        if data:
+            self.location_id_ = data['location_id']
+            self.gender_ = data['gender']
+            self.unit_ = data['unit']
+            self.worker_on = data['get_all']
 
-        else:
-            self.get_offline_search(response)
+    def load_json_files(self, json_path):
+        try:
+            with open(json_path, 'r') as json_file:
+                data = json.load(json_file)
+            return data
+        except FileNotFoundError:
+            return False
 
     def set_worker_data(self, by_location, by_gender, by_units, all_workers):
-        self.location_id_ = by_location.text
-        self.gender_ = by_gender.text
-        self.unit_ = by_units.text
+        json_path = "app_data/worker_filter.json"
+        get_all = None
         if all_workers.active:
-            self.worker_on = True
+            get_all = True
         else:
-            self.worker_on = False
+            get_all = False
 
-        if not (self.location_id_ or self.gender_ or self.unit_ or self.worker_on):
-            pass
+        filter_worker = {
+            "get_all": get_all,
+            "location_id": by_location.text,
+            "gender": by_gender.text,
+            "unit": by_units.text
+        }
+        self.create_worker_filter(filter_worker, json_path)
+        self.load_filter_data()
 
-        else:
-            self.get_worker_details()
+        # if not (self.location_id_ or self.gender_ or self.unit_ or self.worker_on):
+        #     return False
+        # else:
+        Clock.schedule_once(lambda x: delete_all_attendance(), 0)
+        threading.Thread(target=self.load_data_gradually, daemon=True).start()
 
-    def get_worker_details(self):
+    def get_all_workers_data(self):
         if self.internet:
+            if all(field.strip() for field in
+                   (self.program_domain, self.program_type, self.program_level, self.program_id)):
+                # response = search_workers_by_params(get_all=True)
+                # if not response:
+                threading.Thread(target=self.load_data_gradually, daemon=True).start()
 
-            Clock.schedule_once(lambda x: self.load_data_gradually(self.access_token), 1)
-
+            else:
+                toast("Please setup program parameter. can't load workers")
         else:
-            toast("You need to enable internet to get workers details")
+            toast("This can not be used in offline mode")
 
-    def load_data_gradually(self, token):
+    def clear_attendance_widget(self, *args):
         mdlist = self.wm.screens[7].ids['worker_list']
-        # Initialize your data or data source
         mdlist.clear_widgets()
+
+    def remember_me(self):
+        """ this function helps to save the user login credentials for next time 'remember me' is ticked """
+        user_mail = self.wm.screens[2].ids['user_login'].text
+        user_password = self.wm.screens[2].ids['user_password'].text
+        json_path = "app_data/remember_me.json"
+        if self.wm.screens[2].ids['remember'].active:
+            value = True
+        else:
+            value = False
+        data = {
+            "email": user_mail,
+            "password": user_password,
+            "remember_me": value
+        }
+        self.create_worker_filter(data, json_path)
+
+    def load_remember_me(self, *args):
         try:
-            data = get_workers(token, self.worker_on, self.location_id_, self.gender_, self.unit_)
-            if data.status_code == 200:
-                img = None
-                delete_all_attendance()
-                for i in data.json():
-                    payload = {
-                        'program_domain': '',
-                        'program_type': '',
-                        'location': '',
-                        'location_id': '',
-                        'date': '',
-                        'worker_id': i.get('user_id'),
-                        'name': i.get('name'),
-                        'gender': i.get('gender'),
-                        'contact': i.get('phone'),
-                        'email': i.get('email'),
-                        'unit': i.get('unit'),
-                        'church_id': i.get('location_id'),
-                        'local_church': i.get('location'),
-                        'status': ''
-                    }
-                    insert_attendance(payload)
+            with open("app_data/remember_me.json", 'r') as json_file:
+                data = json.load(json_file)
+            if data['remember_me']:
+                self.wm.screens[2].ids['remember'].active = True
+                self.wm.screens[2].ids['user_login'].text = data['email']
+                self.wm.screens[2].ids['user_password'].text = data['password']
+        except FileNotFoundError:
+            return False
 
-                response = search_workers_by_params(get_all=True)
+    def create_worker_filter(self, data, json_path):
+        """ Create a JSON file with the given data. """
+        with open(json_path, 'w') as json_file:
+            json.dump(data, json_file, indent=4)
 
-                for j in response:
+    def load_data_gradually(self, *args):
+        try:
+            data = get_workers(self.access_token, self.worker_on, self.location_id_, self.gender_, self.unit_)
+            if data.status_code == 200 and data != []:
+                Clock.schedule_once(lambda x: self.pass_locally(data), 0)
 
-                    if j[8] == "Male":
-                        img = "images/brother.png"
+        except requests.RequestException as e:
+            toast(f"Error! {e}")
 
-                    if j[8] == "Female":
-                        img = "images/sister.png"
+    def pass_locally(self, data):
+        self.clear_attendance_widget()
+        for i in data.json():
+            payload = {
+                'program_domain': '',
+                'program_type': '',
+                'location': '',
+                'location_id': '',
+                'date': '',
+                'worker_id': i.get('user_id'),
+                'name': i.get('name'),
+                'gender': i.get('gender'),
+                'contact': i.get('phone'),
+                'email': i.get('email'),
+                'unit': i.get('unit'),
+                'church_id': i.get('location_id'),
+                'local_church': i.get('location'),
+                'status': ''
+            }
+            # print(payload)
+            try:
+                insert_attendance(payload)
+            except Exception as e:
+                print(e)
 
-                    name = str(j[7])
-                    worker_id = str(j[6])
-                    status = j[14]
-                    self.add_item_to_view(name, worker_id, img, status)
+        # Clock.schedule_once(lambda x: self.get_workers_back, 0)
 
+    def get_workers_back(self, *args):
+        self.clear_attendance_widget()
+        try:
+            img = None
+            response = search_workers_by_params(get_all=True)
+            for j in response:
+
+                if j[8] == "Male":
+                    img = "images/brother.png"
+
+                if j[8] == "Female":
+                    img = "images/sister.png"
+
+                name = str(j[7])
+                worker_id = str(j[6])
+                status = j[14]
+
+                self.add_item_to_view(name, worker_id, img, status)
+            self.update_attendance_count()
         except requests.RequestException as e:
             toast(f"Error! {e}")
 
@@ -1481,47 +1583,60 @@ class DCLMCounter(MDApp):
         mdlist.add_widget(item)
 
     def prep_worker_attendance(self):
-        try:
-            attendance = search_workers_by_params(get_all=True)
-            Clock.schedule_once(lambda x: self.create_attendance(attendance), 1)
-        except Exception as e:
-            print(e)
+        if all(field.strip() for field in
+               (self.program_domain, self.program_type, self.program_level, self.program_id)):
+            try:
+                attendance = search_workers_by_params(get_all=True)
+                threading.Thread(target=self.create_attendance, args=(attendance,), daemon=True).start()
+                # Clock.schedule_once(lambda x: self.create_attendance(attendance), 2)
+            except Exception as e:
+                print(e)
+
+        else:
+            toast("Parameters to submit data not set, please click setup")
 
     def create_attendance(self, attendance):
+        for data in attendance:
+            if data[14] != "":
+                payload = {
+                    'program_domain': data[1],
+                    'program_type': data[2],
+                    'location': data[3],
+                    'location_id': data[4],
+                    'date': data[5],
+                    'worker_id': data[6],
+                    'name': data[7],
+                    'gender': data[8],
+                    'contact': data[9],
+                    'email': data[10],
+                    'unit': data[11],
+                    'church_id': data[12],
+                    'local_church': data[13],
+                    'status': data[14]
+                }
+                self.do_attendance_submit(payload, data[6])
+                # Clock.schedule_once(lambda x: self.do_attendance_submit(payload, data[6]), 0)
+
+        if self.submitted_count > 0:
+            Clock.schedule_once(lambda x: toast(f"{self.submitted_count} data submitted!"), 0)
+
+        else:
+            Clock.schedule_once(lambda x: toast(f"{self.not_submitted_count} attendance not submitted!"), 0)
+
+    def do_attendance_submit(self, payload, data):
         try:
-            for data in attendance:
-                if data[14] != "":
-                    payload = {
-                        'program_domain': data[1],
-                        'program_type': data[2],
-                        'location': data[3],
-                        'location_id': data[4],
-                        'date': data[5],
-                        'worker_id': data[6],
-                        'name': data[7],
-                        'gender': data[8],
-                        'contact': data[9],
-                        'email': data[10],
-                        'unit': data[11],
-                        'church_id': data[12],
-                        'local_church': data[13],
-                        'status': data[14]
-                    }
-
-                    response = submit_worker_attendance(payload, self.access_token)
-                    delete_one_attendance(data[6])
-                    self.find_item(data[6])
-                    self.attendance.remove(data[6])
-                    self.update_attendance_count()
-
+            response = submit_worker_attendance(payload, self.access_token)
             if response.status_code == 201:
-                search_workers_by_params(get_all=True)
-                toast("Attendance Submitted")
+                Clock.schedule_once(lambda x: search_workers_by_params(get_all=True), 0)
+                Clock.schedule_once(lambda x: delete_one_attendance(data), 0)
+                Clock.schedule_once(lambda x: self.find_item(data), 0)
+                Clock.schedule_once(lambda x: delete_an_attendance(data), 0)
+                Clock.schedule_once(lambda x: self.update_attendance_count(), 0)
+                self.submitted_count += 1
+                return response
 
-
-        except Exception as e:
-            toast("Sorry! an error occurred.")
-            print(e)
+        except requests.RequestException as e:
+            self.not_submitted_count += 1
 
     def find_item(self, worker_id):
         mdlist = self.wm.screens[7].ids['worker_list']
@@ -1529,9 +1644,9 @@ class DCLMCounter(MDApp):
             if i.secondary_text == worker_id:
                 mdlist.remove_widget(i)
 
-    # ####################################################################################################################
+    # #################################################################################################################
     #                      GET EITHER COUNTS DATA, REGISTRATION DATA OR ALL THE DATA OFFLINE
-    # ####################################################################################################################
+    # #################################################################################################################
 
     def get_all_counts(self, checkbox, value):
         if value:
@@ -1593,9 +1708,9 @@ class DCLMCounter(MDApp):
         else:
             toast("Please Log in again and mark Internet to send data")
 
-    # ####################################################################################################################
+    # #################################################################################################################
     #                           RE-SUBMIT DATA SAVED LOCALLY
-    # ####################################################################################################################
+    # #################################################################################################################
     def resubmit_reg(self, data, id_):
         payload = {
             "program_domain": data[1],
@@ -1655,7 +1770,7 @@ class DCLMCounter(MDApp):
         except requests.RequestException as e:
             toast("Error, data not submitted!")
 
-    # ####################################################################################################################
+    # #################################################################################################################
 
     def on_state(self, instance, value):
         {
@@ -1663,9 +1778,9 @@ class DCLMCounter(MDApp):
             "stop": self.wm.screens[1].ids['gen_progress'].stop,
         }.get(value)()
 
-    # ####################################################################################################################
+    # #################################################################################################################
     #                                       CONVERT / INVITEE DATA SUBMISSION LOGIC
-    # ####################################################################################################################
+    # #################################################################################################################
     def submit_form(self, name, gender, address, marital, social, job, j_address, level, inviter, phone, c_type, date):
         self.reg_type = ""
         if all(field.strip() for field in (name, gender, address, social, job, j_address, phone, c_type, date)):
@@ -1703,9 +1818,9 @@ class DCLMCounter(MDApp):
             if self.internet:
                 self.submit = True
                 self.indicate_save_data(5, "save_form")
-                Clock.schedule_once(lambda x: self.pass_convert_to_db(payload), 1)
+                Clock.schedule_once(lambda x: self.pass_convert_to_db(payload), 2)
             else:
-                Clock.schedule_once(lambda x: self.send_offline(payload), 1)
+                Clock.schedule_once(lambda x: self.send_offline(payload), 2)
 
         else:
             toast("Please fill necessary filed before submitting")
@@ -1713,7 +1828,7 @@ class DCLMCounter(MDApp):
     def pass_convert_to_db(self, payload):
         try:
             response = create_online_con_record(payload, self.access_token)
-            if response.status_code == 200:
+            if response.status_code == 201:
                 toast("Data Saved Successfully!")
                 self.submit = False
                 self.indicate_save_data(5, "save_form")
@@ -1732,16 +1847,86 @@ class DCLMCounter(MDApp):
         self.update_pending()
         toast("Data Saved offline")
 
-    # ####################################################################################################################
+    # #################################################################################################################
+    #                                       CONVERT / INVITEE DATA SUBMISSION LOGIC
+    # #################################################################################################################
+    def reset_worker_form(self):
+        self.wm.screens[9].ids.worker_id.text = ""
+        self.wm.screens[9].ids.full_name.text = ""
+        self.wm.screens[9].ids.location_name.text = ""
+        self.wm.screens[9].ids.gender.text = ""
+        self.wm.screens[9].ids.phone_number.text = ""
+        self.wm.screens[9].ids.email.text = ""
+        self.wm.screens[9].ids.address.text = ""
+        self.wm.screens[9].ids.occupation.text = ""
+        self.wm.screens[9].ids.marital_status.text = ""
+        self.wm.screens[9].ids.work_area.text = ""
+        self.wm.screens[9].ids.worker_location_id.text = ""
+        self.wm.screens[9].ids.worker_type.text = ""
+
+    def generate_worker_id(self, location_id, worker_type):
+        if (location_id and worker_type) != "":
+            if worker_type == "Regional Coordinator":
+                worker_type = "Rigional Coordinator"
+            payload = {
+                "location_id": location_id,
+                "admin": worker_type
+            }
+            Clock.schedule_once(lambda x: self.get_worker_id(payload), 2)
+            # threading.Thread(target=self.get_worker_id(payload), daemon=True).start()
+
+    def get_worker_id(self, payload):
+        try:
+            response = generate_worker_id(payload)
+            if response.status_code == 201:
+                # print()
+                self.wm.screens[9].ids.worker_id.text = response.json()
+        except requests.RequestException as e:
+            toast("Error! Worker could not be created.")
+
+    def submit_worker_reg(self, worker_id, worker_location_id, location_name, full_name, gender, phone_number, email,
+                          address, occupation, marital_status, work_area):
+
+        if all(field.strip() for field in (
+                worker_id, worker_location_id, location_name, full_name, gender, phone_number, address, marital_status,
+                work_area)):
+            payload = {
+                "user_id": worker_id,
+                "location_id": worker_location_id,
+                "location": location_name,
+                "name": full_name,
+                "gender": gender,
+                "phone": phone_number,
+                "email": email,
+                "address": address,
+                "occupation": occupation,
+                "marital_status": marital_status,
+                "unit": work_area
+            }
+            Clock.schedule_once(lambda x: self.send_worker(payload), 2)
+
+        else:
+            toast("Please ever necessary field")
+
+    def send_worker(self, payload):
+        try:
+            response = create_new_worker(payload)
+            if response.status_code == 201:
+                self.reset_worker_form()
+                toast("Data Saved Successfully!")
+        except requests.RequestException as e:
+            toast("Error! Worker could not be created.")
+
+    # #################################################################################################################
     #                                               OFFLINE DATABASE CONNECTION
-    # ####################################################################################################################
+    # #################################################################################################################
 
     def get_offline_search(self, data):
         mdlist = self.wm.screens[7].ids['worker_list']
         mdlist.clear_widgets()
         response = search_workers_by_params(name=data)
         if response:
-            img = None
+            img = ''
             for j in response:
                 if j[8] == "Male":
                     img = "images/brother.png"
@@ -1755,10 +1940,59 @@ class DCLMCounter(MDApp):
                 # print(name)
                 self.add_item_to_view(name, user_id, img, status)
 
+    # =======================================> this controls the back button <=========================================
+    def add_screen_2list(self, view):
+        self.navigator.append(view)
+
+    def remove_screen_4rm_list(self, *args):
+        if self.navigator:
+            self.navigator.pop()
+
+    def back_button(self, window, key, *largs):
+        if key == 27:
+            data = self.navigator
+            try:
+                self.change_screen(data[-1])
+                self.remove_screen_4rm_list()
+            except Exception as e:
+                app.stop()
+            return True
+
+    def load_screens(self, *args):
+        Builder.load_file("view/login/login.kv")
+        Builder.load_file("view/signup/signup.kv")
+        Builder.load_file("view/home/home.kv")
+        Builder.load_file("view/counter/counter.kv")
+        Builder.load_file("view/record/record.kv")
+        Builder.load_file("view/viewdata/viewdata.kv")
+        Builder.load_file("view/attendance/attendance.kv")
+        Builder.load_file("view/workers/workers.kv")
+        Builder.load_file("view/settings/setting.kv")
+        Builder.load_file("view/widgets/card_item.kv")
+        Builder.load_file("view/widgets/attendance_setup.kv")
+        Builder.load_file("view/widgets/count_summary.kv")
+        Builder.load_file("view/widgets/setup_reg.kv")
+        Builder.load_file("view/widgets/edit_count.kv")
+        Builder.load_file("view/widgets/submit_data.kv")
+        Builder.load_file("view/widgets/attendance_list.kv")
+        Builder.load_file("view/widgets/get_workers.kv")
+        Builder.load_file("view/widgets/get_app_apiurl.kv")
+
+    def create_local_db(self):
+        self.create_pickle_file()
+        create_worker()
+        create_attendance()
+        create_offline_count()
+        create_offline_convert()
+        create_user_log()
+        create_attendance_count()
+        create_program_setup()
+
 
 if __name__ == "__main__":
     # check_screen()
     app = DCLMCounter()
+    app.create_local_db()
     app.run()
 
 # BB868980

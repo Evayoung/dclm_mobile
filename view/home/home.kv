@@ -159,6 +159,7 @@
         pos_hint: {'center_x': .9, 'center_y': .51}
         on_release:
             app.change_screen("pending")
+            app.add_screen_2list("home")
 
 
     MDLabel:
@@ -217,8 +218,6 @@
         bold: True
 
 
-
-
     MDLabel:
         id: program_domain
         text: ""
@@ -274,10 +273,11 @@
         size_hint: .4, .06
         halign: "center"
         font_name: "fonts/Poppins-Medium.ttf"
-        pos_hint: {"center_x": .5, "center_y": .29}
+        pos_hint: {"center_x": .5, "center_y": .28}
         font_size: '12sp'
         on_release:
             app.setup_program_dialog()
+
 
     MDLabel:
         text: "What would you like to do?"
@@ -289,7 +289,6 @@
         color: "#b3b3b3"
         pos_hint: {'center_x': .5, 'center_y': .21}
         # bold: True
-
 
 
     MDTextButton:

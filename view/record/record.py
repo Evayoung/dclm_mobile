@@ -6,6 +6,8 @@ from kivymd.uix.menu import MDDropdownMenu
 
 
 class RecordScreenView(Screen):
+    def __init__(self, **kwargs):
+        super(RecordScreenView, self).__init__(**kwargs)
 
     def show_date_picker(self):
         self.program_date = [

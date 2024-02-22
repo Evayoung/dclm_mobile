@@ -21,7 +21,7 @@
         #text_color: app.theme_cls.primary_color
         pos_hint: {'center_x': .09, 'center_y': .96}
         on_release:
-            app.add_screen_2list("pending")
+            app.remove_screen_4rm_list()
             app.change_screen("home")
 
     MDLabel:
@@ -95,7 +95,7 @@
         orientation: "horizontal"
 
         MDIconButton:
-            icon: "tools"
+            icon: "arrow-collapse-down"
             icon_size: "20dp"
             size_hint: None, None
             size: (45, 45)
@@ -105,14 +105,29 @@
             #text_color: app.theme_cls.primary_color
             pos_hint: {'center_x': .15, 'center_y': .5}
             on_release:
-                app.get_all_workers_data()
+                app.get_workers_back()
+
+
+        MDIconButton:
+            # icon: ""
+            icon: "tune-vertical"
+            icon_size: "20dp"
+            size_hint: None, None
+            size: (45, 45)
+            icon_color: 1, 1, 1, 1
+            user_font_size: '12sp'
+            theme_text_color: "Custom"
+            #text_color: app.theme_cls.primary_color
+            pos_hint: {"center_x": .3, "center_y": .5}
+            on_release:
+                app.confirm_get_workers()
 
         MDBoxLayout:
             size_hint: .25, .7
             #padding: [10, 0, 5, 0]
             radius: [5]
             orientation: 'horizontal'
-            pos_hint: {'center_x': 0.4, 'center_y': 0.5}
+            pos_hint: {'center_x': 0.6, 'center_y': 0.5}
             md_bg_color: 1, 1, 1, 0.1
 
             MDLabel:
@@ -127,18 +142,6 @@
                 pos_hint: {'center_x': .5, 'center_y': .5}
                 # bold: True
 
-        MDIconButton:
-            icon: "account-cog"
-            icon_size: "20dp"
-            size_hint: None, None
-            size: (45, 45)
-            icon_color: 1, 1, 1, 1
-            user_font_size: '12sp'
-            theme_text_color: "Custom"
-            #text_color: app.theme_cls.primary_color
-            pos_hint: {"center_x": .65, "center_y": .5}
-            on_release:
-                app.confirm_get_workers()
 
 
         MDIconButton:

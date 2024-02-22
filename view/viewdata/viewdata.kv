@@ -21,8 +21,8 @@
         #text_color: app.theme_cls.primary_color
         pos_hint: {'center_x': .09, 'center_y': .96}
         on_release:
-            app.add_screen_2list("pending")
             app.change_screen("home")
+            app.remove_screen_4rm_list()
 
     MDLabel:
         id: viewdata_title

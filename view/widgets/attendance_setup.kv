@@ -1,15 +1,45 @@
 <AttendanceSetup>:
     size_hint: 1, None
-    height: "160dp"
+    height: dp(180)
     md_bg_color: "white"
     orientation: 'vertical'
-    padding: [20, 0, 20, 20]
-    spacing: 10
+    padding: [20, 0, 20, 10]
+    # spacing: 10
+
     MDBoxLayout:
         orientation: 'horizontal'
+        spacing: 15
+        size_hint: 1, None
+        height: dp(38)
+        MDCheckbox:
+            id: all_workers
+            group: 'setup'
+            size_hint: None, None
+            size: dp(35), dp(35)
+            color_active: app.theme_cls.primary_color
+            color_inactive: app.theme_cls.primary_color
+            pos_hint: {'center_y': 0.5}
+            # on_active: app.update_offline(*args)
+
+        MDLabel:
+            text: "State Workers"
+            size: self.texture_size
+            #theme_text_color: 'Custom'
+            halign: 'left'
+            font_size: '12sp'
+            font_name: "fonts/Poppins-Medium.ttf"
+            color: app.theme_cls.primary_color
+            pos_hint: {'center_y': 0.5}
+            # bold: True
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        size_hint: 1, None
+        height: dp(38)
         spacing: 10
         MDCheckbox:
-            #group: 'setup'
+            id: check_location
+            group: 'setup'
             size_hint: None, None
             size: dp(35), dp(35)
             color_active: app.theme_cls.primary_color
@@ -43,7 +73,10 @@
     MDBoxLayout:
         orientation: 'horizontal'
         spacing: 10
+        size_hint: 1, None
+        height: dp(38)
         MDCheckbox:
+            id: check_gender
             #group: 'setup'
             size_hint: None, None
             size: dp(35), dp(35)
@@ -79,7 +112,10 @@
     MDBoxLayout:
         orientation: 'horizontal'
         spacing: 10
+        size_hint: 1, None
+        height: dp(38)
         MDCheckbox:
+            id: check_units
             #group: 'setup'
             size_hint: None, None
             size: dp(35), dp(35)
@@ -111,40 +147,36 @@
                 background_color: 0, 0, 0, 0
                 readonly: True
 
-
     MDBoxLayout:
         orientation: 'horizontal'
-        spacing: 15
-        MDCheckbox:
-            id: all_workers
-            #group: 'setup'
-            size_hint: None, None
-            size: dp(35), dp(35)
-            color_active: app.theme_cls.primary_color
-            color_inactive: app.theme_cls.primary_color
-            pos_hint: {'center_y': 0.5}
-            # on_active: app.update_offline(*args)
+        spacing: 10
+        size_hint: 1, None
+        height: dp(40)
 
-        MDLabel:
-            text: "State Workers"
-            size: self.texture_size
-            #theme_text_color: 'Custom'
-            halign: 'left'
-            font_size: '12sp'
-            font_name: "fonts/Poppins-Medium.ttf"
+        MDTextButton:
+            text: "Close"
+            # md_bg_color: 0, 0, 0, 0
             color: app.theme_cls.primary_color
-            pos_hint: {'center_y': 0.5}
-            # bold: True
+            size_hint: .4, None
+            height: dp(45)
+            halign: "center"
+            font_name: "fonts/Poppins-Medium.ttf"
+            pos_hint: {"center_x": .3}
+            font_size: '12sp'
+            on_release:
+                app.close_attendance_setup()
 
-    MDTextButton:
-        text: "Save"
-        # md_bg_color: 0, 0, 0, 0
-        color: app.theme_cls.primary_color
-        #size_hint: .4, .06
-        halign: "center"
-        font_name: "fonts/Poppins-Medium.ttf"
-        pos_hint: {"center_x": .9}
-        font_size: '12sp'
-        on_release:
-            app.close_attendance_setup()
-            app.set_worker_data(by_location, by_gender, by_units, all_workers)
+        MDTextButton:
+            text: "Save"
+            # md_bg_color: 0, 0, 0, 0
+            color: app.theme_cls.primary_color
+            size_hint: .4, None
+            height: dp(45)
+            halign: "center"
+            font_name: "fonts/Poppins-Medium.ttf"
+            pos_hint: {"center_x": .7}
+            font_size: '12sp'
+            on_release:
+                app.close_attendance_setup()
+                app.set_worker_data(by_location, by_gender, by_units, all_workers)
+

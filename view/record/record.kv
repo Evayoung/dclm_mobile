@@ -22,6 +22,7 @@
         pos_hint: {'center_x': .09, 'center_y': .96}
         on_release:
             app.change_screen("home")
+            app.remove_screen_4rm_list()
 
     MDLabel:
         id: record_title
@@ -129,278 +130,294 @@
         on_release:
             root.show_date_picker()
 
-    MDBoxLayout:
-        size_hint: .88, .055
-        padding: [10, 0, 20, 0]
-        radius: [5]
-        pos_hint: {'center_x': 0.5, 'center_y': 0.82}
-        md_bg_color: "white"
+    ScrollView:
+        size_hint: .88, .7
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        MDList:
+            spacing: 15
 
-        TextInput:
-            id: f_name
-            text: ''
-            hint_text: "Full Name :"
-            size_hint: .88, None
-            pos_hint: {"center_x": .46, 'center_y': .5}
-            height: self.minimum_height
-            multiline: False
-            cursor_width: "2sp"
-            font_size: "10sp"
-            font_name: "fonts/Poppins-Regular.ttf"
-            foreground_color: app.theme_cls.primary_color
-            background_color: 0, 0, 0, 0
-            #on_text: app.validate_hospital_id(*args)
-            #on_focus: app.validate_when_focus(*args)
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(45)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+                md_bg_color: "white"
 
-    MDBoxLayout:
-        size_hint: .88, .055
-        padding: [10, 0, 20, 0]
-        radius: [5]
-        pos_hint: {'center_x': 0.5, 'center_y': 0.75}
-        md_bg_color: "white"
+                TextInput:
+                    id: f_name
+                    text: ''
+                    hint_text: "Full Name :"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: app.theme_cls.primary_color
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
 
-        TextInput:
-            id: gender
-            text: ''
-            hint_text: "Gender :"
-            size_hint: .88, None
-            pos_hint: {"center_x": .46, 'center_y': .5}
-            height: self.minimum_height
-            multiline: False
-            cursor_width: "2sp"
-            font_size: "10sp"
-            readonly: True
-            font_name: "fonts/Poppins-Regular.ttf"
-            foreground_color: app.theme_cls.primary_color
-            background_color: 0, 0, 0, 0
-            #on_text: app.validate_hospital_id(*args)
-            #on_focus: app.validate_when_focus(*args)
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(45)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                pos_hint: {'center_x': 0.5, 'center_y': 0.75}
+                md_bg_color: "white"
 
-        MDTextButton:
-            id: gender_group
-            text: "Select"
-            font_size: "10sp"
-            color: .6, .6, .6, 1
-            size_hint: .15, .2
-            pos_hint: {"center_x": .97, "center_y": .5}
-            bold: True
-            on_release: root.select_gender()
+                TextInput:
+                    id: gender
+                    text: ''
+                    hint_text: "Gender :"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    readonly: True
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: app.theme_cls.primary_color
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
 
-    MDBoxLayout:
-        size_hint: .88, .055
-        padding: [10, 0, 20, 0]
-        radius: [5]
-        pos_hint: {'center_x': 0.5, 'center_y': 0.68}
-        md_bg_color: "white"
+                MDTextButton:
+                    id: gender_group
+                    text: "Select"
+                    font_size: "11sp"
+                    color: .6, .6, .6, 1
+                    size_hint: .15, .8
+                    pos_hint: {"center_x": .97, "center_y": .5}
+                    bold: True
+                    on_release: root.select_gender()
 
-        TextInput:
-            id: phone
-            text: ''
-            hint_text: "Phone Number :"
-            size_hint: .88, None
-            pos_hint: {"center_x": .46, 'center_y': .5}
-            height: self.minimum_height
-            multiline: False
-            cursor_width: "2sp"
-            font_size: "10sp"
-            font_name: "fonts/Poppins-Regular.ttf"
-            foreground_color: app.theme_cls.primary_color
-            background_color: 0, 0, 0, 0
-            #on_text: app.validate_hospital_id(*args)
-            #on_focus: app.validate_when_focus(*args)
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(45)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                pos_hint: {'center_x': 0.5, 'center_y': 0.68}
+                md_bg_color: "white"
 
-    MDBoxLayout:
-        size_hint: .88, .055
-        padding: [10, 0, 20, 0]
-        radius: [5]
-        pos_hint: {'center_x': 0.5, 'center_y': 0.61}
-        md_bg_color: "white"
+                TextInput:
+                    id: phone
+                    text: ''
+                    hint_text: "Phone Number :"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: app.theme_cls.primary_color
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
 
-        TextInput:
-            id: address
-            text: ''
-            hint_text: "Address :"
-            size_hint: .88, None
-            pos_hint: {"center_x": .46, 'center_y': .5}
-            height: self.minimum_height
-            multiline: False
-            cursor_width: "2sp"
-            font_size: "10sp"
-            font_name: "fonts/Poppins-Regular.ttf"
-            foreground_color: app.theme_cls.primary_color
-            background_color: 0, 0, 0, 0
-            #on_text: app.validate_hospital_id(*args)
-            #on_focus: app.validate_when_focus(*args)
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(45)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                pos_hint: {'center_x': 0.5, 'center_y': 0.61}
+                md_bg_color: "white"
 
-
-    MDBoxLayout:
-        size_hint: .88, .055
-        padding: [10, 0, 20, 0]
-        radius: [5]
-        orientation: "horizontal"
-        pos_hint: {'center_x': 0.5, 'center_y': 0.54}
-        md_bg_color: "white"
-
-        TextInput:
-            id: marital
-            text: ''
-            hint_text: "Marital Status :"
-            size_hint: .88, None
-            pos_hint: {"center_x": .4, 'center_y': .5}
-            height: self.minimum_height
-            multiline: False
-            cursor_width: "2sp"
-            font_size: "10sp"
-            readonly: True
-            font_name: "fonts/Poppins-Regular.ttf"
-            foreground_color: app.theme_cls.primary_color
-            background_color: 0, 0, 0, 0
-            #on_text: app.validate_hospital_id(*args)
-            #on_focus: app.validate_when_focus(*args)
-
-        MDTextButton:
-            id: marital_status
-            text: "Select"
-            font_size: "10sp"
-            color: .6, .6, .6, 1
-            size_hint: .15, .2
-            pos_hint: {"center_x": .97, "center_y": .5}
-            bold: True
-            on_release: root.select_marital_status()
-
-    MDBoxLayout:
-        size_hint: .88, .055
-        padding: [10, 0, 20, 0]
-        radius: [5]
-        pos_hint: {'center_x': 0.5, 'center_y': 0.47}
-        md_bg_color: "white"
-
-        TextInput:
-            id: social
-            text: ''
-            hint_text: "Social Group (adult/youth/children) :"
-            size_hint: .88, None
-            pos_hint: {"center_x": .46, 'center_y': .5}
-            height: self.minimum_height
-            multiline: False
-            cursor_width: "2sp"
-            font_size: "10sp"
-            readonly: True
-            font_name: "fonts/Poppins-Regular.ttf"
-            foreground_color: app.theme_cls.primary_color
-            background_color: 0, 0, 0, 0
-            #on_text: app.validate_hospital_id(*args)
-            #on_focus: app.validate_when_focus(*args)
-
-        MDTextButton:
-            id: social_group
-            text: "Select"
-            font_size: "10sp"
-            color: .6, .6, .6, 1
-            size_hint: .15, .2
-            pos_hint: {"center_x": .97, "center_y": .5}
-            bold: True
-            on_release: root.select_social_group()
-
-    MDBoxLayout:
-        size_hint: .88, .055
-        padding: [10, 0, 20, 0]
-        radius: [5]
-        pos_hint: {'center_x': 0.5, 'center_y': 0.40}
-        md_bg_color: "white"
-
-        TextInput:
-            id: job
-            text: ''
-            hint_text: "Profession/Institution/School :"
-            size_hint: .88, None
-            pos_hint: {"center_x": .46, 'center_y': .5}
-            height: self.minimum_height
-            multiline: False
-            cursor_width: "2sp"
-            font_size: "10sp"
-            font_name: "fonts/Poppins-Regular.ttf"
-            foreground_color: app.theme_cls.primary_color
-            background_color: 0, 0, 0, 0
-            #on_text: app.validate_hospital_id(*args)
-            #on_focus: app.validate_when_focus(*args)
-
-    MDBoxLayout:
-        size_hint: .88, .055
-        padding: [10, 0, 20, 0]
-        radius: [5]
-        pos_hint: {'center_x': 0.5, 'center_y': 0.33}
-        md_bg_color: "white"
-
-        TextInput:
-            id: j_address
-            text: ''
-            hint_text: "Work Address/Discipline/School Address :"
-            size_hint: .88, None
-            pos_hint: {"center_x": .46, 'center_y': .5}
-            height: self.minimum_height
-            multiline: False
-            cursor_width: "2sp"
-            font_size: "10sp"
-            font_name: "fonts/Poppins-Regular.ttf"
-            foreground_color: app.theme_cls.primary_color
-            background_color: 0, 0, 0, 0
-            #on_text: app.validate_hospital_id(*args)
-            #on_focus: app.validate_when_focus(*args)
-
-    MDBoxLayout:
-        size_hint: .88, .055
-        padding: [10, 0, 20, 0]
-        radius: [5]
-        pos_hint: {'center_x': 0.5, 'center_y': 0.26}
-        md_bg_color: "white"
-
-        TextInput:
-            id: level
-            text: ''
-            hint_text: "Level/Class(campus & Youth) :"
-            size_hint: .88, None
-            pos_hint: {"center_x": .46, 'center_y': .5}
-            height: self.minimum_height
-            multiline: False
-            cursor_width: "2sp"
-            font_size: "10sp"
-            font_name: "fonts/Poppins-Regular.ttf"
-            foreground_color: app.theme_cls.primary_color
-            background_color: 0, 0, 0, 0
-            #on_text: app.validate_hospital_id(*args)
-            #on_focus: app.validate_when_focus(*args)
+                TextInput:
+                    id: address
+                    text: ''
+                    hint_text: "Address :"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "10sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: app.theme_cls.primary_color
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
 
 
-    MDBoxLayout:
-        size_hint: .88, .055
-        padding: [10, 0, 20, 0]
-        radius: [5]
-        pos_hint: {'center_x': 0.5, 'center_y': 0.19}
-        md_bg_color: "white"
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(45)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                orientation: "horizontal"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.54}
+                md_bg_color: "white"
 
-        TextInput:
-            id: inviter
-            text: ''
-            hint_text: "Invited :"
-            size_hint: .88, None
-            pos_hint: {"center_x": .46, 'center_y': .5}
-            height: self.minimum_height
-            multiline: False
-            cursor_width: "2sp"
-            font_size: "10sp"
-            font_name: "fonts/Poppins-Regular.ttf"
-            foreground_color: app.theme_cls.primary_color
-            background_color: 0, 0, 0, 0
-            #on_text: app.validate_hospital_id(*args)
-            #on_focus: app.validate_when_focus(*args)
+                TextInput:
+                    id: marital
+                    text: ''
+                    hint_text: "Marital Status :"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .4, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "10sp"
+                    readonly: True
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: app.theme_cls.primary_color
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+                MDTextButton:
+                    id: marital_status
+                    text: "Select"
+                    font_size: "10sp"
+                    color: .6, .6, .6, 1
+                    size_hint: .15, .8
+                    pos_hint: {"center_x": .97, "center_y": .5}
+                    bold: True
+                    on_release: root.select_marital_status()
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(45)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                pos_hint: {'center_x': 0.5, 'center_y': 0.47}
+                md_bg_color: "white"
+
+                TextInput:
+                    id: social
+                    text: ''
+                    hint_text: "Social Group (adult/youth/children) :"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    readonly: True
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: app.theme_cls.primary_color
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+                MDTextButton:
+                    id: social_group
+                    text: "Select"
+                    font_size: "11sp"
+                    color: .6, .6, .6, 1
+                    size_hint: .15, .8
+                    pos_hint: {"center_x": .97, "center_y": .5}
+                    bold: True
+                    on_release: root.select_social_group()
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(45)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                pos_hint: {'center_x': 0.5, 'center_y': 0.40}
+                md_bg_color: "white"
+
+                TextInput:
+                    id: job
+                    text: ''
+                    hint_text: "Profession/Institution/School :"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: app.theme_cls.primary_color
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(45)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                pos_hint: {'center_x': 0.5, 'center_y': 0.33}
+                md_bg_color: "white"
+
+                TextInput:
+                    id: j_address
+                    text: ''
+                    hint_text: "Work Address/Discipline/School Address :"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: app.theme_cls.primary_color
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(45)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                pos_hint: {'center_x': 0.5, 'center_y': 0.26}
+                md_bg_color: "white"
+
+                TextInput:
+                    id: level
+                    text: ''
+                    hint_text: "Level/Class(campus & Youth) :"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: app.theme_cls.primary_color
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(45)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                pos_hint: {'center_x': 0.5, 'center_y': 0.19}
+                md_bg_color: "white"
+
+                TextInput:
+                    id: inviter
+                    text: ''
+                    hint_text: "Invited :"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: app.theme_cls.primary_color
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
 
     MDLabel:
         text: "Salvation Type :"
         size: self.texture_size
         #theme_text_color: 'Custom'
         halign: 'center'
-        font_size: '10sp'
+        font_size: '11sp'
         font_name: "fonts/Poppins-SemiBold.ttf"
         color: .3, .3, .3, 1
         pos_hint: {'center_x': .2, 'center_y': .12}

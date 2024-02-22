@@ -1,0 +1,467 @@
+<WorkersScreenView>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background.png'
+
+    MDBoxLayout:
+        md_bg_color: 0, 0, 0, .7
+        orientation: 'vertical'
+        spacing: 20
+        padding: 20
+
+    MDIconButton:
+        icon: "arrow-left"
+        icon_size: "20dp"
+        size_hint: None, None
+        size: (45, 45)
+        icon_color: "white"
+        user_font_size: '12sp'
+        theme_text_color: "Custom"
+        #text_color: 204/255, 204/255, 204/255
+        pos_hint: {'center_x': .09, 'center_y': .96}
+        on_release:
+            app.change_screen("signup")
+            app.remove_screen_4rm_list()
+
+    MDLabel:
+        id: record_title
+        text: "Workers Registration Form"
+        size: self.texture_size
+        #theme_text_color: 'Custom'
+        halign: 'left'
+        font_size: '16sp'
+        font_name: "fonts/Poppins-SemiBold.ttf"
+        color: 204/255, 204/255, 204/255
+        pos_hint: {'center_x': .65, 'center_y': .96}
+        bold: True
+
+    MDBoxLayout:
+        size_hint: .43, None
+        height: dp(38)
+        padding: [5, 0, 5, 0]
+        radius: [5]
+        pos_hint: {'center_x': 0.235, 'center_y': 0.9}
+        # md_bg_color: "white"
+        canvas.before:
+            Color:
+                rgb: 204/255, 204/255, 204/255
+            Line:
+                width: 0.5
+                rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+        TextInput:
+            id: worker_location_id
+            text: ''
+            hint_text: "location ID of worker"
+            size_hint: .88, None
+            pos_hint: {"center_x": .46, 'center_y': .5}
+            height: self.minimum_height
+            multiline: False
+            cursor_width: "2sp"
+            font_size: "11sp"
+            font_name: "fonts/Poppins-Regular.ttf"
+            foreground_color: "white"
+            background_color: 0, 0, 0, 0
+            #on_text: app.validate_hospital_id(*args)
+            #on_focus: app.validate_when_focus(*args)
+
+
+    MDBoxLayout:
+        size_hint: .5, None
+        height: dp(38)
+        padding: [5, 0, 5, 0]
+        orientation: "horizontal"
+        radius: [5]
+        pos_hint: {'center_x': 0.72, 'center_y': 0.9}
+        # md_bg_color: "white"
+        canvas.before:
+            Color:
+                rgb: 204/255, 204/255, 204/255
+            Line:
+                width: 0.5
+                rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+        TextInput:
+            id: worker_type
+            text: ''
+            hint_text: "Admin type"
+            size_hint: .88, None
+            pos_hint: {"center_x": .46, 'center_y': .5}
+            height: self.minimum_height
+            multiline: False
+            cursor_width: "2sp"
+            font_size: "11sp"
+            font_name: "fonts/Poppins-Regular.ttf"
+            foreground_color: "white"
+            background_color: 0, 0, 0, 0
+            #on_text: app.validate_hospital_id(*args)
+            #on_focus: app.validate_when_focus(*args)
+
+        MDTextButton:
+            id: select_admin_type
+            size_hint: None, .8
+            text: "Select"
+            font_name: "fonts/Poppins-Medium.ttf"
+            font_size: "12sp"
+            color: 204/255, 204/255, 204/255
+            pos_hint: {"center_y": .5}
+            on_release:
+                root.show_admin_levels()
+
+    ScrollView:
+        size_hint: .88, .75
+        pos_hint: {'center_x': .5, 'center_y': .48}
+        # effect_cls: ScrollEffect
+        always_overscroll: False
+        MDList:
+            spacing: 15
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(40)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                #pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+                canvas.before:
+                    Color:
+                        rgb: 204/255, 204/255, 204/255
+                    Line:
+                        width: 0.5
+                        rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+
+                TextInput:
+                    id: worker_id
+                    text: ''
+                    hint_text: "Worker's ID"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    readonly: True
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: "white"
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+                MDTextButton:
+                    size_hint: None, .8
+                    text: "Generate ID"
+                    font_name: "fonts/Poppins-Medium.ttf"
+                    font_size: "10sp"
+                    color: 204/255, 204/255, 204/255
+                    pos_hint: {"center_x": .89, "center_y": .5}
+                    on_release:
+                        app.generate_worker_id(worker_location_id.text, worker_type.text)
+
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(40)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                # pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+                canvas.before:
+                    Color:
+                        rgb: 204/255, 204/255, 204/255
+                    Line:
+                        width: 0.5
+                        rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+                TextInput:
+                    id: full_name
+                    text: ''
+                    hint_text: "Full Name :"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: "white"
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(40)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                # pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+                canvas.before:
+                    Color:
+                        rgb: 204/255, 204/255, 204/255
+                    Line:
+                        width: 0.5
+                        rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+                TextInput:
+                    id: location_name
+                    text: ''
+                    hint_text: "location name"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: "white"
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(40)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                # pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+                canvas.before:
+                    Color:
+                        rgb: 204/255, 204/255, 204/255
+                    Line:
+                        width: 0.5
+                        rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+                TextInput:
+                    id: gender
+                    text: ''
+                    hint_text: "Select Gender"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    readonly: True
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: "white"
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+                MDTextButton:
+                    id: gender_btn
+                    size_hint: None, .8
+                    text: "Select"
+                    font_name: "fonts/Poppins-Medium.ttf"
+                    font_size: "10sp"
+                    color: 204/255, 204/255, 204/255
+                    pos_hint: {"center_x": .89, "center_y": .5}
+                    on_release: root.select_gender()
+
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(40)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                # pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+                canvas.before:
+                    Color:
+                        rgb: 204/255, 204/255, 204/255
+                    Line:
+                        width: 0.5
+                        rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+                TextInput:
+                    id: phone_number
+                    text: ''
+                    hint_text: "Phone Number"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: "white"
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(40)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                # pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+                canvas.before:
+                    Color:
+                        rgb: 204/255, 204/255, 204/255
+                    Line:
+                        width: 0.5
+                        rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+                TextInput:
+                    id: email
+                    text: ''
+                    hint_text: "Worker's email"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: "white"
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(40)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                # pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+                canvas.before:
+                    Color:
+                        rgb: 204/255, 204/255, 204/255
+                    Line:
+                        width: 0.5
+                        rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+                TextInput:
+                    id: address
+                    text: ''
+                    hint_text: "Address"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: "white"
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(40)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                # pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+                canvas.before:
+                    Color:
+                        rgb: 204/255, 204/255, 204/255
+                    Line:
+                        width: 0.5
+                        rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+                TextInput:
+                    id: occupation
+                    text: ''
+                    hint_text: "Occupation"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: "white"
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(40)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                # pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+                canvas.before:
+                    Color:
+                        rgb: 204/255, 204/255, 204/255
+                    Line:
+                        width: 0.5
+                        rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+                TextInput:
+                    id: marital_status
+                    text: ''
+                    hint_text: "Marital Status"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    readonly: True
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: "white"
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+                MDTextButton:
+                    id: marital_status_btn
+                    size_hint: None, .8
+                    text: "Select"
+                    font_name: "fonts/Poppins-Medium.ttf"
+                    font_size: "10sp"
+                    color: 204/255, 204/255, 204/255
+                    pos_hint: {"center_x": .89, "center_y": .5}
+                    on_release: root.select_marital_status()
+
+            MDBoxLayout:
+                size_hint: .88, None
+                height: dp(40)
+                padding: [10, 0, 20, 0]
+                radius: [5]
+                # pos_hint: {'center_x': 0.5, 'center_y': 0.82}
+                canvas.before:
+                    Color:
+                        rgb: 204/255, 204/255, 204/255
+                    Line:
+                        width: 0.5
+                        rounded_rectangle: self.x, self.y, self.width, self.height, 8, 8, 8, 8, 100
+
+                TextInput:
+                    id: work_area
+                    text: ''
+                    hint_text: "Work Area"
+                    size_hint: .88, None
+                    pos_hint: {"center_x": .46, 'center_y': .5}
+                    height: self.minimum_height
+                    multiline: False
+                    cursor_width: "2sp"
+                    font_size: "11sp"
+                    font_name: "fonts/Poppins-Regular.ttf"
+                    foreground_color: "white"
+                    background_color: 0, 0, 0, 0
+                    #on_text: app.validate_hospital_id(*args)
+                    #on_focus: app.validate_when_focus(*args)
+
+    MDRaisedButton:
+        text: "Reset"
+        md_bg_color: app.theme_cls.primary_color
+        size_hint: .35, .05
+        pos_hint: {"center_x": .3, "center_y": .05}
+        bold: True
+        on_release: app.reset_worker_form()
+
+
+    MDRaisedButton:
+        id: save_form
+        text: "Save"
+        md_bg_color: app.theme_cls.primary_color
+        size_hint: .35, .05
+        pos_hint: {"center_x": .7, "center_y": .05}
+        bold: True
+        on_release:
+            app.submit_worker_reg(worker_id.text, worker_location_id.text, location_name.text, full_name.text, gender.text,
+            phone_number.text, email.text, address.text, occupation.text, marital_status.text, work_area.text)

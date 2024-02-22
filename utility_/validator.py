@@ -16,10 +16,6 @@ class Validate:
     def validate_phone(self, phone):
         pattern = r'^[0-9]+$'
         return re.match(pattern, phone) is not None
-
-    def validate_hospital_id(self, hospital):
-        pattern = r'^[a-zA-Z]+-[a-zA-Z]+-[0-9]+$'
-        return re.match(pattern, hospital) is not None
         
     def validate_user_id(self, user):
         pattern = r'^[a-zA-Z]+/[a-zA-Z]+/[0-9]+$'
